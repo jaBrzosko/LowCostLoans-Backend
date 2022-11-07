@@ -2,7 +2,7 @@ using Contracts;
 
 namespace Services;
 
-public class PostExampleHandler : IHttpPostHandler<PostExample>
+public class PostExampleExecutor : IHttpPostExecutor<PostExample>
 {
     public Task HandleAsync(PostExample args)
     {

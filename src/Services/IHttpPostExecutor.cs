@@ -1,6 +1,6 @@
 namespace Services;
 
-public interface IHttpPostHandler<TPost>
+public interface IHttpPostExecutor<TPost>
 {
     public Task HandleAsync(TPost args);
 }
