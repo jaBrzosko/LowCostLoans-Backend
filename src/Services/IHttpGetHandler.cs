@@ -1,6 +1,8 @@
+using Contracts;
+
 namespace Services;
 
-public interface IHttpGetHandler<GetType, ReturnedType>
+public interface IHttpGetHandler<TIn, TOut> where TIn : IHttpGet<TOut>
 {
-    public Task<ReturnedType> GetAsync(GetType args);
+    public Task<TOut> GetAsync(TIn args);
 }

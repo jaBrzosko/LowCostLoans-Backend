@@ -1,6 +1,6 @@
-﻿namespace Contracts;
+﻿namespace Contracts.Examples;
 
-public class GetExample
+public class GetExample : IHttpGet<ExampleDto>
 {
     public int Id { get; set; }
     public string Name { get; set; }

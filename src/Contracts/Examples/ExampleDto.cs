@@ -1,4 +1,4 @@
-namespace Contracts;
+namespace Contracts.Examples;
 
 public class ExampleDto
 {

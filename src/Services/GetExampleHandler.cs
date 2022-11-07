@@ -1,4 +1,5 @@
 ﻿using Contracts;
+using Contracts.Examples;
 
 namespace Services;
 

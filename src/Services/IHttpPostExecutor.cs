@@ -1,6 +1,8 @@
+using Contracts;
+
 namespace Services;
 
-public interface IHttpPostExecutor<TPost>
+public interface IHttpPostExecutor<TIn> where TIn : IHttpPost
 {
-    public Task HandleAsync(TPost args);
+    public Task HandleAsync(TIn args);
 }
