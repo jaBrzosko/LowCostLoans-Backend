@@ -1,7 +1,7 @@
 using Contracts;
 using Services;
 
-namespace Proj5;
+namespace Api;
 
 public class Program
 {
