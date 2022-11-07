@@ -1,4 +1,4 @@
-﻿namespace Domain;
+﻿namespace Domain.Examples;
 
 public class Example
 {

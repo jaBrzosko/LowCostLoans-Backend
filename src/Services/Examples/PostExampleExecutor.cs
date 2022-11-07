@@ -1,7 +1,6 @@
-using Contracts;
 using Contracts.Examples;
 
-namespace Services;
+namespace Services.Examples;
 
 public class PostExampleExecutor : IHttpPostExecutor<PostExample>
 {

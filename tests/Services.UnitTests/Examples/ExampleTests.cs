@@ -1,7 +1,7 @@
 using FluentAssertions;
 using Xunit;
 
-namespace Services.UnitTests;
+namespace Services.UnitTests.Examples;
 
 public class ExampleTests
 {

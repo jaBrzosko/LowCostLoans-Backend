@@ -1,6 +1,7 @@
 using Contracts;
 using Contracts.Examples;
 using Services;
+using Services.Examples;
 
 namespace Api;
 

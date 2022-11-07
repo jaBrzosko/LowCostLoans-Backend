@@ -1,7 +1,6 @@
-﻿using Contracts;
-using Contracts.Examples;
+﻿using Contracts.Examples;
 
-namespace Services;
+namespace Services.Examples;
 
 public class GetExampleHandler : IHttpGetHandler<GetExample, ExampleDto>
 {
