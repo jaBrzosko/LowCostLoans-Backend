@@ -1,6 +1,6 @@
 namespace Contracts.Examples;
 
-public class PostExample : IHttpPost
+public class PostExample
 {
     public string Name { get; set; }
 

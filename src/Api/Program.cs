@@ -1,7 +1,9 @@
 using Contracts.Examples;
+using FastEndpoints;
+using FastEndpoints.Swagger;
 using FluentValidation;
 using Services;
-using Services.Examples;
+using Services.Services;
 
 namespace Api;
 
@@ -10,15 +12,15 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        builder.Services.AddScoped<GetExampleHandler>();
-        builder.Services.AddScoped<IHttpPostExecutor<PostExample>, PostExampleExecutor>();
-        builder.Services.AddScoped<AbstractValidator<PostExample>, PostExampleValidator>();
-        builder.Services.AddScoped<HttpPostHandler<PostExample>>();
+        builder.Services.AddScoped<ExampleService>();
+        builder.Services.AddFastEndpoints();
+        builder.Services.AddSwaggerDoc();
         var app = builder.Build();
 
-        app.MapGet("/", () => "Hello World!");
-        app.MapGet("/Example", (int id, string name, GetExampleHandler handler) => handler.GetAsync((id, name)));
-        app.MapPost("/Example", (PostExample request, HttpPostHandler<PostExample> handler) => handler.HandleAsync(request));
+        app.UseAuthorization();
+        app.UseFastEndpoints();
+        app.UseOpenApi();
+        app.UseSwaggerUi3(s => s.ConfigureDefaults());
 
         app.Run();
     }

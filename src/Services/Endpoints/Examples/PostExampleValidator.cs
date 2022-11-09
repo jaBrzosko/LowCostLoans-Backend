@@ -1,13 +1,14 @@
 using Contracts.Examples;
+using FastEndpoints;
 using FluentValidation;
 
-namespace Services.Examples;
+namespace Services.Endpoints.Examples;
 
-public class PostExampleValidator : AbstractValidator<PostExample>
+public class PostExampleValidator : Validator<PostExample>
 {
     public PostExampleValidator()
     {
-        RuleFor(p => p.Name)
+        RuleFor(req => req.Name)
             .NotEmpty()
             .WithErrorCode(PostExample.ErrorCodes.NameIsEmpty.ToString())
             .MaximumLength(20)
