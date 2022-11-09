@@ -29,7 +29,7 @@ public class Program
                     Errors = failures
                         .Select(f => new Error
                         {
-                            ErrorCode = f.ErrorCode,
+                            ErrorCode = int.Parse(f.ErrorCode),
                             ErrorMessage = f.ErrorMessage,
                         })
                         .ToList(),
