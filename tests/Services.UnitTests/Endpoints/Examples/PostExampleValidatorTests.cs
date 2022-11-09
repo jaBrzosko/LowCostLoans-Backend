@@ -1,5 +1,6 @@
 using Contracts.Examples;
 using FluentAssertions;
+using Services.Data;
 using Services.Endpoints.Examples;
 using Xunit;
 
@@ -34,7 +35,7 @@ public class PostExampleValidatorTests
     [Fact]
     public async Task Name_is_too_long()
     {
-        var request = new PostExample { Name = new string('a', 21) };
+        var request = new PostExample { Name = new string('a', StringLengths.ShortString + 1) };
 
         var validationResult = await validator.ValidateAsync(request);
 

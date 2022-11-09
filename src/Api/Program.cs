@@ -3,6 +3,7 @@ using FastEndpoints;
 using FastEndpoints.Swagger;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Services.Data;
 using Services.ValidationExtensions;
 using Services.Services;
 
@@ -13,6 +14,7 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        builder.Services.AddDbContext<CoreDbContext>();
         builder.Services.AddScoped<ExampleService>();
         builder.Services.AddFastEndpoints();
         builder.Services.AddSwaggerDoc();

@@ -5,33 +5,32 @@ using Services.Data;
 
 namespace Services.Endpoints.Examples;
 
-public class GetExampleEndpoint : Endpoint<GetExample, ExampleDto?>
+public class GetAllExamplesEndpoint : Endpoint<GetAllExamples, List<ExampleDto>>
 {
     private readonly CoreDbContext dbContext;
 
-    public GetExampleEndpoint(CoreDbContext dbContext)
+    public GetAllExamplesEndpoint(CoreDbContext dbContext)
     {
         this.dbContext = dbContext;
     }
 
     public override void Configure()
     {
-        Get("/example");
+        Get("/allExamples");
         AllowAnonymous();
     }
 
-    public override async Task HandleAsync(GetExample req, CancellationToken ct)
+    public override async Task HandleAsync(GetAllExamples req, CancellationToken ct)
     {
         var result = await dbContext
             .Examples
-            .Where(e => e.Id == req.Id)
             .Select(e => new ExampleDto
             {
                 Id = e.Id,
                 Name = e.Name,
                 CreationTime = e.CreationTime,
             })
-            .FirstOrDefaultAsync(ct);
+            .ToListAsync(ct);
         
         await SendAsync(result, cancellation: ct);
     }
