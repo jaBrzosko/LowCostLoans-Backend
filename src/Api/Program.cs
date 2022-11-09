@@ -1,9 +1,8 @@
-using Contracts.Examples;
+using Domain.Examples;
 using FastEndpoints;
 using FastEndpoints.Swagger;
-using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
 using Services.Data;
+using Services.Data.Repositories;
 using Services.ValidationExtensions;
 using Services.Services;
 
@@ -16,6 +15,7 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
         builder.Services.AddDbContext<CoreDbContext>();
         builder.Services.AddScoped<ExampleService>();
+        builder.Services.AddScoped<Repository<Example>>();
         builder.Services.AddFastEndpoints();
         builder.Services.AddSwaggerDoc();
         var app = builder.Build();
