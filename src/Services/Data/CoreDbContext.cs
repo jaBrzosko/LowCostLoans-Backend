@@ -1,6 +1,5 @@
 using Domain.Examples;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Services.Data;
 
@@ -20,6 +19,7 @@ public class CoreDbContext : DbContext
 
     private static void ConfigureExamples(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Example>().HasKey(e => e.Id);
         modelBuilder.Entity<Example>().Property(e => e.Name).HasMaxLength(StringLengths.ShortString);
     }
 }
