@@ -1,20 +1,45 @@
-using Contracts;
-using Services;
+using Domain.Examples;
+using FastEndpoints;
+using FastEndpoints.Swagger;
+using Services.Data;
+using Services.Data.Repositories;
+using Services.ValidationExtensions;
+using Services.Services;
 
-namespace Proj5;
+namespace Api;
 
 public class Program
 {
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        builder.Services.AddScoped<GetExampleHandler>();
-        builder.Services.AddScoped<PostExampleHandler>();
+        builder.Services.AddDbContext<CoreDbContext>();
+        builder.Services.AddScoped<ExampleService>();
+        builder.Services.AddScoped<Repository<Example>>();
+        builder.Services.AddFastEndpoints();
+        builder.Services.AddSwaggerDoc();
         var app = builder.Build();
 
-        app.MapGet("/", () => "Hello World!");
-        app.MapGet("/Example", (int id, string name, GetExampleHandler handler) => handler.GetAsync((id, name)));
-        app.MapPost("/Example", (PostExample request, PostExampleHandler handler) => handler.HandleAsync(request));
+        app.UseAuthorization();
+        app.UseFastEndpoints(c =>
+        {
+            c.Errors.ResponseBuilder = (failures, ctx, statusCode) =>
+            {
+                return new ValidationErrors
+                {
+                    StatusCode = statusCode,
+                    Errors = failures
+                        .Select(f => new Error
+                        {
+                            ErrorCode = int.Parse(f.ErrorCode),
+                            ErrorMessage = f.ErrorMessage,
+                        })
+                        .ToList(),
+                };
+            };
+        });
+        app.UseOpenApi();
+        app.UseSwaggerUi3(s => s.ConfigureDefaults());
 
         app.Run();
     }
