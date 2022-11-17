@@ -13,7 +13,7 @@ public class Inquire
 
     public Inquire(Guid? userId, PersonalData? personalData, int moneyInSmallestUnit, int numberOfInstallments)
     {
-        Validate(userId, personalData);
+        Validate(userId, personalData, moneyInSmallestUnit, numberOfInstallments);
         
         Id = Guid.NewGuid();
         UserId = userId;
@@ -23,11 +23,21 @@ public class Inquire
         CreationTime = DateTime.UtcNow;
     }
 
-    private static void Validate(Guid? userId, PersonalData? personalData)
+    private static void Validate(Guid? userId, PersonalData? personalData, int moneyInSmallestUnit, int numberOfInstallments)
     {
         if (!(userId is null ^ personalData is null))
         {
             throw new ArgumentException("Exactly one of userId and personalData has to be null");
+        }
+
+        if (moneyInSmallestUnit <= 0)
+        {
+            throw new ArgumentException("Money has to be positive");
+        }
+
+        if (numberOfInstallments <= 0)
+        {
+            throw new ArgumentException("NumberOfInstallments has to be positive");
         }
     }
 }
