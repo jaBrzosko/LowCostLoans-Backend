@@ -25,7 +25,7 @@ public class PersonalDataValidator : AbstractValidator<PersonalDataDto>
             .NotEmpty()
             .WithErrorCode(PersonalDataDto.ErrorCodes.GovernmentIdIsEmpty)
             .MaximumLength(StringLengths.MediumString)
-            .MaximumLength(PersonalDataDto.ErrorCodes.GovernmentIdIsTooLong);
+            .WithErrorCode(PersonalDataDto.ErrorCodes.GovernmentIdIsTooLong);
 
         RuleFor(pd => pd)
             .Must(IsGovernmentIdValid)
@@ -45,6 +45,19 @@ public class PersonalDataValidator : AbstractValidator<PersonalDataDto>
 
     private bool IsValidPesel(string pesel)
     {
+        if (pesel.Length != 11)
+        {
+            return false;
+        }
+
+        foreach (var character in pesel)
+        {
+            if (!char.IsDigit(character))
+            {
+                return false;
+            }
+        }
+
         return true;
     }
 }
