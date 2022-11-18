@@ -12,5 +12,7 @@ public class PostCreateInquireAsAnonymous
     {
         public const int MoneyHasToBePositive = 1;
         public const int NumberOfInstallmentsHasToBePositive = 2;
+        
+        public class PersonalDataErrors : PersonalDataDto.ErrorCodes { }
     }
 }

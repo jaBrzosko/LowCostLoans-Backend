@@ -8,7 +8,7 @@ public class PersonalDataDto
     public GovernmentIdTypeDto GovernmentIdType { get; set; }
     public JobTypeDto JobType { get; set; }
 
-    public static class ErrorCodes
+    public class ErrorCodes
     {
         public const int FirstNameIsEmpty = 1_001;
         public const int FirstNameIsTooLong = 1_002;
