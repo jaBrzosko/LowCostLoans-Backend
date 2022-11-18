@@ -10,4 +10,7 @@ public class User
         Id = Guid.NewGuid();
         PersonalData = personalData;
     }
+    
+    private User()
+    { }
 }

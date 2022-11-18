@@ -22,6 +22,9 @@ public class Inquire
         NumberOfInstallments = numberOfInstallments;
         CreationTime = DateTime.UtcNow;
     }
+    
+    private Inquire() 
+    { }
 
     private static void Validate(Guid? userId, PersonalData? personalData, int moneyInSmallestUnit, int numberOfInstallments)
     {

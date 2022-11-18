@@ -39,6 +39,8 @@ public class CoreDbContext : DbContext
                 inner.Property(e => e.FirstName).HasMaxLength(StringLengths.ShortString);
                 inner.Property(e => e.LastName).HasMaxLength(StringLengths.ShortString);
                 inner.Property(e => e.GovernmentId).HasMaxLength(StringLengths.MediumString);
+                inner.Property(e => e.GovernmentIdType);
+                inner.Property(e => e.JobType);
             });
         });
     }
@@ -48,11 +50,17 @@ public class CoreDbContext : DbContext
         modelBuilder.Entity<Inquire>(cfg =>
         {
             cfg.HasKey(e => e.Id);
+            cfg.Property(e => e.UserId);
+            cfg.Property(e => e.MoneyInSmallestUnit);
+            cfg.Property(e => e.NumberOfInstallments);
+            cfg.Property(e => e.CreationTime);
             cfg.OwnsOne(e => e.PersonalData, inner =>
             {
                 inner.Property(e => e.FirstName).HasMaxLength(StringLengths.ShortString);
                 inner.Property(e => e.LastName).HasMaxLength(StringLengths.ShortString);
                 inner.Property(e => e.GovernmentId).HasMaxLength(StringLengths.MediumString);
+                inner.Property(e => e.GovernmentIdType);
+                inner.Property(e => e.JobType);
             });
         });
     }
