@@ -1,5 +1,6 @@
 using Domain.Examples;
 using Domain.Inquires;
+using Domain.Offers;
 using Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,7 @@ public class CoreDbContext : DbContext
     public DbSet<Example> Examples { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Inquire> Inquiries { get; set; }
+    public DbSet<Offer> Offers { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -20,7 +22,8 @@ public class CoreDbContext : DbContext
     {
         ConfigureExamples(modelBuilder);
         ConfigureUsers(modelBuilder);
-        ConfigureInquires(modelBuilder);
+        ConfigureInquiries(modelBuilder);
+        ConfigureOffers(modelBuilder);
     }
 
     private static void ConfigureExamples(ModelBuilder modelBuilder)
@@ -45,7 +48,7 @@ public class CoreDbContext : DbContext
         });
     }
     
-    private static void ConfigureInquires(ModelBuilder modelBuilder)
+    private static void ConfigureInquiries(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Inquire>(cfg =>
         {
@@ -62,6 +65,19 @@ public class CoreDbContext : DbContext
                 inner.Property(e => e.GovernmentIdType);
                 inner.Property(e => e.JobType);
             });
+        });
+    }
+    
+    private static void ConfigureOffers(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Offer>(cfg =>
+        {
+            cfg.HasKey(e => e.Id);
+            cfg.Property(e => e.InquireId);
+            cfg.Property(e => e.InterestRate);
+            cfg.Property(e => e.MoneyInSmallestUnit);
+            cfg.Property(e => e.NumberOfInstallments);
+            cfg.Property(e => e.CreationTime);
         });
     }
 }
