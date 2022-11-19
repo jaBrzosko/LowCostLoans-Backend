@@ -1,6 +1,7 @@
 using Contracts.Users;
 using FluentValidation;
 using Services.Data;
+using Services.Endpoints.Users.ValidationHelpers;
 using Services.ValidationExtensions;
 
 namespace Services.Endpoints.Users;
@@ -38,26 +39,8 @@ public class PersonalDataValidator : AbstractValidator<PersonalDataDto>
         switch (personalData.GovernmentIdType)
         {
             case GovernmentIdTypeDto.Pesel:
-                return IsValidPesel(personalData.GovernmentId);
+                return PeselValidationHelper.IsValid(personalData.GovernmentId);
         }
         return false;
-    }
-
-    private bool IsValidPesel(string pesel)
-    {
-        if (pesel.Length != 11)
-        {
-            return false;
-        }
-
-        foreach (var character in pesel)
-        {
-            if (!char.IsDigit(character))
-            {
-                return false;
-            }
-        }
-
-        return true;
     }
 }
