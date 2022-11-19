@@ -18,7 +18,7 @@ public class PostCreateInquireAsAnonymousValidatorTests
         {
             FirstName = "first name",
             LastName = "last name",
-            GovernmentId = "01234567890",
+            GovernmentId = "55030101230",
             GovernmentIdType = GovernmentIdTypeDto.Pesel,
             JobType = JobTypeDto.SomeJobType,
         },
