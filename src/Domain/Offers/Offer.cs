@@ -11,11 +11,26 @@ public class Offer : IDbEntity
     
     public Offer(Guid inquireId, int interestRate, int moneyInSmallestUnit, int numberOfInstallments)
     {
+        Validate(moneyInSmallestUnit, numberOfInstallments);
+        
         Id = Guid.NewGuid();
         InquireId = inquireId;
         InterestRate = interestRate;
         MoneyInSmallestUnit = moneyInSmallestUnit;
         NumberOfInstallments = numberOfInstallments;
         CreationTime = DateTime.UtcNow;
+    }
+    
+    private static void Validate(int moneyInSmallestUnit, int numberOfInstallments)
+    {
+        if (moneyInSmallestUnit <= 0)
+        {
+            throw new ArgumentException("Money has to be positive");
+        }
+
+        if (numberOfInstallments <= 0)
+        {
+            throw new ArgumentException("NumberOfInstallments has to be positive");
+        }
     }
 }
