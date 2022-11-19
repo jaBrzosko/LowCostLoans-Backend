@@ -7,7 +7,7 @@ using Services.Data.Repositories;
 
 namespace Services.Endpoints.Inquires;
 
-[HttpPost("/inquires/createInquireAsAnonymous")]
+[HttpPost("/inquiries/createInquireAsAnonymous")]
 [AllowAnonymous]
 public class PostCreateInquireAsAnonymousEndpoint : Endpoint<PostCreateInquireAsAnonymous>
 {
