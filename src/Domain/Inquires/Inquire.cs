@@ -10,6 +10,7 @@ public class Inquire : IDbEntity
     public int MoneyInSmallestUnit { get; private init; }
     public int NumberOfInstallments { get; private init; }
     public DateTime CreationTime { get; private init; }
+    public InquireStatus Status { get; private set;  }
 
     public Inquire(Guid? userId, PersonalData? personalData, int moneyInSmallestUnit, int numberOfInstallments)
     {
@@ -21,6 +22,7 @@ public class Inquire : IDbEntity
         MoneyInSmallestUnit = moneyInSmallestUnit;
         NumberOfInstallments = numberOfInstallments;
         CreationTime = DateTime.UtcNow;
+        Status = InquireStatus.Unprocessed;
     }
     
     private Inquire() 
@@ -42,5 +44,10 @@ public class Inquire : IDbEntity
         {
             throw new ArgumentException("NumberOfInstallments has to be positive");
         }
+    }
+
+    public void UpdateStatus(InquireStatus status)
+    {
+        Status = status;
     }
 }

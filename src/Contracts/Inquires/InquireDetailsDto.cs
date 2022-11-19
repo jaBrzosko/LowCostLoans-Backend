@@ -8,5 +8,6 @@ public class InquireDetailsDto
     public int MoneyInSmallestUnit { get; set; }
     public int NumberOfInstallments { get; set; }
     public DateTime CreationTime { get; set; }
+    public InquireStatusDto Status { get; set; }
     public List<OfferDto> Offers { get; set; }
 }

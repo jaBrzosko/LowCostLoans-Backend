@@ -29,6 +29,7 @@ public class GetInquireDetailsByIdEndpoint : Endpoint<GetInquireDetailsById, Inq
                 MoneyInSmallestUnit = iq.MoneyInSmallestUnit,
                 NumberOfInstallments = iq.NumberOfInstallments,
                 CreationTime = iq.CreationTime,
+                Status = (InquireStatusDto)iq.Status,
                 Offers = dbContext
                     .Offers
                     .Where(o => o.InquireId == iq.Id)

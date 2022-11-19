@@ -57,6 +57,7 @@ public class CoreDbContext : DbContext
             cfg.Property(e => e.MoneyInSmallestUnit);
             cfg.Property(e => e.NumberOfInstallments);
             cfg.Property(e => e.CreationTime);
+            cfg.Property(e => e.Status);
             cfg.OwnsOne(e => e.PersonalData, inner =>
             {
                 inner.Property(e => e.FirstName).HasMaxLength(StringLengths.ShortString);

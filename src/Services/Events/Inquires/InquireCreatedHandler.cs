@@ -34,6 +34,8 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
         {
             offersRepository.Add(o);
         }
+        inquire.UpdateStatus(InquireStatus.OffersGenerated);
+        inquiriesRepository.Update(inquire);
 
         await dbContext.SaveChangesAsync(ct);
     }
