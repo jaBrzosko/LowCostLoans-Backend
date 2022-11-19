@@ -2,7 +2,7 @@ using Domain.Users;
 
 namespace Domain.Inquires;
 
-public class Inquire
+public class Inquire : IDbEntity
 {
     public Guid Id { get; private init; }
     public Guid? UserId { get; private init; }
