@@ -1,3 +1,4 @@
+using Contracts.Common;
 using Contracts.Inquires;
 using Domain.Inquires;
 using FastEndpoints;
@@ -9,7 +10,7 @@ namespace Services.Endpoints.Inquires;
 
 [HttpPost("/inquiries/createInquireAsAnonymous")]
 [AllowAnonymous]
-public class PostCreateInquireAsAnonymousEndpoint : Endpoint<PostCreateInquireAsAnonymous>
+public class PostCreateInquireAsAnonymousEndpoint : Endpoint<PostCreateInquireAsAnonymous, PostResponseWithIdDto>
 {
     private readonly Repository<Inquire> inquiriesRepository;
 
@@ -22,6 +23,7 @@ public class PostCreateInquireAsAnonymousEndpoint : Endpoint<PostCreateInquireAs
     {
         var inquire = new Inquire(null, req.PersonalData.ToEntity(), req.MoneyInSmallestUnit, req.NumberOfInstallments);
         await inquiriesRepository.AddAsync(inquire, ct);
-        await SendAsync(new object(), cancellation: ct);
+        var response = new PostResponseWithIdDto { Id = inquire.Id };
+        await SendAsync(response, cancellation: ct);
     }
 }
