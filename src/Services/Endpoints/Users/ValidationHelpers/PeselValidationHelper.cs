@@ -21,7 +21,8 @@ public class PeselValidationHelper
     {
         return IsLengthValid() &&
                AreAllCharactersDigits() &&
-               IsControlDigitValid();
+               IsControlDigitValid() &&
+               IsMonthNumberCorrect();
     }
 
     private bool IsLengthValid()
@@ -69,5 +70,18 @@ public class PeselValidationHelper
     private int Char2int(char a)
     {
         return a - '0';
+    }
+
+    private bool IsMonthNumberCorrect()
+    {
+        int firstDigit = Char2int(pesel[2]);
+        int secondDigit = Char2int(pesel[3]);
+        
+        if (firstDigit % 2 == 0)
+        {
+            return true;
+        }
+
+        return secondDigit < 3;
     }
 }

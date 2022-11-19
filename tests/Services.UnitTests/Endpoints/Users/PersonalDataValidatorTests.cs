@@ -159,4 +159,15 @@ public class PersonalDataValidatorTests
 
         validationResult.EnsureCorrectError(PersonalDataDto.ErrorCodes.GovernmentIdIsInvalid);
     }
+    
+    [Fact]
+    public async Task GovernmentId_is_pesel_with_invalid_month()
+    {
+        var personalData = validPersonalData;
+        personalData.GovernmentId = "55130101233";
+
+        var validationResult = await validator.ValidateAsync(personalData);
+
+        validationResult.EnsureCorrectError(PersonalDataDto.ErrorCodes.GovernmentIdIsInvalid);
+    }
 }
