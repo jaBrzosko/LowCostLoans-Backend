@@ -17,7 +17,7 @@ public class OfferCreationTests
         var actualOffer = new Offer(expectedInquireId, expectedInterestRate, expectedMoney, expectedNumberOfInstallments);
 
         actualOffer.InquireId.Should().Be(expectedInquireId);
-        actualOffer.InterestRate.Should().Be(expectedInterestRate);
+        actualOffer.InterestRateInPromiles.Should().Be(expectedInterestRate);
         actualOffer.MoneyInSmallestUnit.Should().Be(expectedMoney);
         actualOffer.NumberOfInstallments.Should().Be(expectedNumberOfInstallments);
     }

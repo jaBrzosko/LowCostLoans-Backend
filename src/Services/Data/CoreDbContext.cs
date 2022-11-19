@@ -75,7 +75,7 @@ public class CoreDbContext : DbContext
         {
             cfg.HasKey(e => e.Id);
             cfg.Property(e => e.InquireId);
-            cfg.Property(e => e.InterestRate);
+            cfg.Property(e => e.InterestRateInPromiles);
             cfg.Property(e => e.MoneyInSmallestUnit);
             cfg.Property(e => e.NumberOfInstallments);
             cfg.Property(e => e.CreationTime);

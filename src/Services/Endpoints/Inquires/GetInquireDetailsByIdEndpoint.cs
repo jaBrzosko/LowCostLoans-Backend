@@ -39,7 +39,7 @@ public class GetInquireDetailsByIdEndpoint : Endpoint<GetInquireDetailsById, Inq
                         InquireId = o.InquireId,
                         MoneyInSmallestUnit = o.MoneyInSmallestUnit,
                         NumberOfInstallments = o.NumberOfInstallments,
-                        InterestRate = o.InterestRate,
+                        InterestRateInPromiles = o.InterestRateInPromiles,
                         CreationTime = o.CreationTime,
                     })
                     .ToList(),
