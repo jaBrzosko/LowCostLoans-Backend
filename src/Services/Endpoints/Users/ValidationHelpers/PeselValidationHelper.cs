@@ -22,7 +22,8 @@ public class PeselValidationHelper
         return IsLengthValid() &&
                AreAllCharactersDigits() &&
                IsControlDigitValid() &&
-               IsMonthNumberCorrect();
+               IsMonthCorrect() &&
+               IsDayCorrect();
     }
 
     private bool IsLengthValid()
@@ -72,7 +73,7 @@ public class PeselValidationHelper
         return a - '0';
     }
 
-    private bool IsMonthNumberCorrect()
+    private bool IsMonthCorrect()
     {
         int firstDigit = Char2int(pesel[2]);
         int secondDigit = Char2int(pesel[3]);
@@ -83,5 +84,11 @@ public class PeselValidationHelper
         }
 
         return secondDigit < 3;
+    }
+
+    private bool IsDayCorrect()
+    {
+        int day = Char2int(pesel[4]) * 10 + Char2int(pesel[5]);
+        return day < 32;
     }
 }
