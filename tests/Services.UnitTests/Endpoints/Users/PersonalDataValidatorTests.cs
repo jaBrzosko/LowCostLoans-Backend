@@ -13,7 +13,7 @@ public class PersonalDataValidatorTests
     {
         FirstName = "first name",
         LastName = "last name",
-        GovernmentId = "01234567890",
+        GovernmentId = "55030101230",
         GovernmentIdType = GovernmentIdTypeDto.Pesel,
         JobType = JobTypeDto.SomeJobType,
     };
@@ -132,6 +132,28 @@ public class PersonalDataValidatorTests
     {
         var personalData = validPersonalData;
         personalData.GovernmentId = "invalid pesel";
+
+        var validationResult = await validator.ValidateAsync(personalData);
+
+        validationResult.EnsureCorrectError(PersonalDataDto.ErrorCodes.GovernmentIdIsInvalid);
+    }
+    
+    [Fact]
+    public async Task GovernmentId_is_pesel_with_invalid_control_digit()
+    {
+        var personalData = validPersonalData;
+        personalData.GovernmentId = "55030101231";
+
+        var validationResult = await validator.ValidateAsync(personalData);
+
+        validationResult.EnsureCorrectError(PersonalDataDto.ErrorCodes.GovernmentIdIsInvalid);
+    }
+    
+    [Fact]
+    public async Task GovernmentId_is_pesel_with_invalid_length()
+    {
+        var personalData = validPersonalData;
+        personalData.GovernmentId = "550301012311";
 
         var validationResult = await validator.ValidateAsync(personalData);
 
