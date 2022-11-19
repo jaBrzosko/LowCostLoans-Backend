@@ -11,17 +11,17 @@ namespace Services.Endpoints.Inquires;
 [AllowAnonymous]
 public class PostCreateInquireAsAnonymousEndpoint : Endpoint<PostCreateInquireAsAnonymous>
 {
-    private readonly Repository<Inquire> inquiresRepository;
+    private readonly Repository<Inquire> inquiriesRepository;
 
-    public PostCreateInquireAsAnonymousEndpoint(Repository<Inquire> inquiresRepository)
+    public PostCreateInquireAsAnonymousEndpoint(Repository<Inquire> inquiriesRepository)
     {
-        this.inquiresRepository = inquiresRepository;
+        this.inquiriesRepository = inquiriesRepository;
     }
 
     public override async Task HandleAsync(PostCreateInquireAsAnonymous req, CancellationToken ct)
     {
         var inquire = new Inquire(null, req.PersonalData.ToEntity(), req.MoneyInSmallestUnit, req.NumberOfInstallments);
-        await inquiresRepository.AddAsync(inquire, ct);
+        await inquiriesRepository.AddAsync(inquire, ct);
         await SendAsync(new object(), cancellation: ct);
     }
 }

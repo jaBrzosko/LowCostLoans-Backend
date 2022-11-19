@@ -9,7 +9,7 @@ public class CoreDbContext : DbContext
 {
     public DbSet<Example> Examples { get; set; }
     public DbSet<User> Users { get; set; }
-    public DbSet<Inquire> Inquires { get; set; }
+    public DbSet<Inquire> Inquiries { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
