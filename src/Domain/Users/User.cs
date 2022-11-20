@@ -1,6 +1,6 @@
 namespace Domain.Users;
 
-public class User
+public class User : IDbEntity
 {
     public Guid Id { get; private init; }
     public PersonalData PersonalData { get; private set; }

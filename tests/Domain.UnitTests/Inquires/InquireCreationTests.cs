@@ -52,7 +52,7 @@ public class InquireCreationTests
     }
     
     [Fact]
-    public void MNumberOfInstallments_is_negative()
+    public void NumberOfInstallments_is_negative()
     {
         TestThrowingArgumentException(Guid.NewGuid(), null, 123, -123);
     }
@@ -71,5 +71,6 @@ public class InquireCreationTests
         actualInquire.PersonalData.Should().BeEquivalentTo(personalData);
         actualInquire.MoneyInSmallestUnit.Should().Be(money);
         actualInquire.NumberOfInstallments.Should().Be(numberOfInstallments);
+        actualInquire.Status.Should().Be(InquireStatus.Unprocessed);
     }
 }
