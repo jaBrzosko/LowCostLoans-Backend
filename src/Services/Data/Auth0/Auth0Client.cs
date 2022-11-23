@@ -6,14 +6,10 @@ namespace Services.Data.Auth0;
 
 public class Auth0Client
 {
-    private static string _endpointUrl = "";
     private HttpClient client;
 
     public Auth0Client(HttpClient client) =>
         this.client = client;
-
-    public static void SetEndpointUrl(string newUrl) =>
-        _endpointUrl = newUrl;
     
     public async Task<Auth0Profile?> GetProfile(string token)
     {
