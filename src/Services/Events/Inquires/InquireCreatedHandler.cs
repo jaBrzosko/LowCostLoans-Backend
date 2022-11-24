@@ -1,6 +1,7 @@
 using Domain.Inquires;
 using Domain.Offers;
 using FastEndpoints;
+using Microsoft.Extensions.DependencyInjection;
 using Services.Data;
 using Services.Data.Repositories;
 
@@ -8,19 +9,20 @@ namespace Services.Events.Inquires;
 
 public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
 {
-    private readonly Repository<Inquire> inquiriesRepository;
-    private readonly Repository<Offer> offersRepository;
+    private readonly IServiceProvider serviceProvider;
     private readonly CoreDbContext dbContext;
 
-    public InquireCreatedHandler(Repository<Inquire> inquiriesRepository, Repository<Offer> offersRepository, CoreDbContext dbContext)
+    public InquireCreatedHandler(IServiceProvider serviceProvider, CoreDbContext dbContext)
     {
-        this.inquiriesRepository = inquiriesRepository;
-        this.offersRepository = offersRepository;
+        this.serviceProvider = serviceProvider;
         this.dbContext = dbContext;
     }
 
     public async Task HandleAsync(InquireCreatedEvent eventModel, CancellationToken ct)
     {
+        var inquiriesRepository = serviceProvider.GetService<Repository<Inquire>>()!;
+        var offersRepository = serviceProvider.GetService<Repository<Offer>>()!;
+        
         var inquire = await inquiriesRepository.FindAndEnsureExistence(eventModel.InquireId, ct);
         
         // TODO: ask different apis for creating offers
