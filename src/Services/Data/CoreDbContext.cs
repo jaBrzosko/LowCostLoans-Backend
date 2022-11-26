@@ -37,6 +37,7 @@ public class CoreDbContext : DbContext
         modelBuilder.Entity<User>(cfg =>
         {
             cfg.HasKey(e => e.Id);
+            cfg.Property(e => e.Id).HasMaxLength(StringLengths.ShortString);
             cfg.OwnsOne(e => e.PersonalData, inner =>
             {
                 inner.Property(e => e.FirstName).HasMaxLength(StringLengths.ShortString);
