@@ -25,4 +25,26 @@ public static class UserDataMapper
             (JobType)personalDataDto.JobType
         );
     }
+
+    public static PersonalDataDto ToDto(this PersonalData personalData)
+    {
+        return new()
+        {
+            FirstName = personalData.FirstName,
+            LastName = personalData.LastName,
+            GovernmentId = personalData.GovernmentId,
+            GovernmentIdType = (GovernmentIdTypeDto)personalData.GovernmentIdType,
+            JobType = (JobTypeDto)personalData.JobType,
+        };
+    }
+
+    public static PersonalDataDto? ToNullableDto(this PersonalData? personalData)
+    {
+        if (personalData is null)
+        {
+            return null;
+        }
+
+        return ToDto(personalData);
+    }
 }
