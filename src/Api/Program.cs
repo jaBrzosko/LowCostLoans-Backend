@@ -1,6 +1,3 @@
-using Domain.Examples;
-using Domain.Inquires;
-using Domain.Offers;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using Services.Data;
@@ -24,9 +21,10 @@ public class Program
             client.BaseAddress = new Uri(builder.Configuration["Auth0ApiUrl"]);
         });
         builder.Services.AddScoped<ExampleService>();
-        builder.Services.AddScoped<Repository<Example>>();
-        builder.Services.AddScoped<Repository<Inquire>>();
-        builder.Services.AddScoped<Repository<Offer>>();
+        builder.Services.AddScoped<ExamplesRepository>();
+        builder.Services.AddScoped<InquiresRepository>();
+        builder.Services.AddScoped<OffersRepository>();
+        builder.Services.AddScoped<UsersRepository>();
         builder.Services.AddFastEndpoints();
         builder.Services.AddSwaggerDoc();
         // CORS
@@ -66,7 +64,7 @@ public class Program
                     Errors = failures
                         .Select(f => new Error
                         {
-                            ErrorCode = int.Parse(f.ErrorCode),
+                            ErrorCode = 0,
                             ErrorMessage = f.ErrorMessage,
                         })
                         .ToList(),

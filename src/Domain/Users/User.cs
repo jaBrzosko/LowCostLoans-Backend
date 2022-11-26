@@ -1,13 +1,13 @@
 namespace Domain.Users;
 
-public class User : IDbEntity
+public class User
 {
-    public Guid Id { get; private init; }
+    public string Id { get; private init; }
     public PersonalData PersonalData { get; private set; }
 
-    public User(PersonalData personalData)
+    public User(string id, PersonalData personalData)
     {
-        Id = Guid.NewGuid();
+        Id = id;
         PersonalData = personalData;
     }
     

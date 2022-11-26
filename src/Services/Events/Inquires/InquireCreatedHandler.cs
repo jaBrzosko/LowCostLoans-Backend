@@ -20,8 +20,8 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
 
     public async Task HandleAsync(InquireCreatedEvent eventModel, CancellationToken ct)
     {
-        var inquiriesRepository = serviceProvider.GetService<Repository<Inquire>>()!;
-        var offersRepository = serviceProvider.GetService<Repository<Offer>>()!;
+        var inquiriesRepository = serviceProvider.GetService<InquiresRepository>()!;
+        var offersRepository = serviceProvider.GetService<OffersRepository>()!;
         
         var inquire = await inquiriesRepository.FindAndEnsureExistence(eventModel.InquireId, ct);
         
