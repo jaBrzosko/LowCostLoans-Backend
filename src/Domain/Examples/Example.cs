@@ -1,6 +1,6 @@
 ﻿namespace Domain.Examples;
 
-public class Example : IDbEntity
+public class Example
 {
     public Guid Id { get; private init; }
     public string Name { get; private set;  }

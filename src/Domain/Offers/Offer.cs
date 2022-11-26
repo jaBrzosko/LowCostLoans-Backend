@@ -1,6 +1,6 @@
 namespace Domain.Offers;
 
-public class Offer : IDbEntity
+public class Offer
 {
     public Guid Id { get; private init; }
     public Guid InquireId { get; private init; }
