@@ -4,6 +4,9 @@ using FastEndpoints;
 using Microsoft.Extensions.DependencyInjection;
 using Services.Data;
 using Services.Data.Repositories;
+using Services.Services.Apis;
+using Services.Services.Apis.OurApis;
+using Inquire = Domain.Inquires.Inquire;
 
 namespace Services.Events.Inquires;
 
@@ -11,6 +14,7 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
 {
     private readonly IServiceProvider serviceProvider;
     private readonly CoreDbContext dbContext;
+    private List<IApiOffersGetter> apiOffersGetters = null!;
 
     public InquireCreatedHandler(IServiceProvider serviceProvider, CoreDbContext dbContext)
     {
@@ -20,25 +24,52 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
 
     public async Task HandleAsync(InquireCreatedEvent eventModel, CancellationToken ct)
     {
+        ConstructApiOffersGetters();
         var inquiriesRepository = serviceProvider.GetService<InquiresRepository>()!;
         var offersRepository = serviceProvider.GetService<OffersRepository>()!;
-        
+
         var inquire = await inquiriesRepository.FindAndEnsureExistence(eventModel.InquireId, ct);
-        
-        // TODO: ask different apis for creating offers
-        var offers = new List<Offer>()
+
+        try
         {
-            new(inquire.Id, 1, 1000, 12),
-            new(inquire.Id, 2, 1010, 12),
-            new(inquire.Id, 3, 3400, 24),
-        };
-        foreach (var o in offers)
-        {
-            offersRepository.Add(o);
+            foreach (var offersGetter in apiOffersGetters)
+            {
+                var apiOffers = await offersGetter.GetOffersAsync(ToDbData(inquire), ct);
+                foreach (var o in apiOffers)
+                {
+                    var offer = new Offer(inquire.Id, o.InterestRateInPromiles, o.MoneyInSmallestUnit, o.NumberOfInstallments);
+                    offersRepository.Add(offer);
+                }
+            }
+
+            inquire.UpdateStatus(InquireStatus.OffersGenerated);
+            inquiriesRepository.Update(inquire);
         }
-        inquire.UpdateStatus(InquireStatus.OffersGenerated);
-        inquiriesRepository.Update(inquire);
+        catch (Exception)
+        {
+            inquire.UpdateStatus(InquireStatus.OffersGenerationFailed);
+            inquiriesRepository.Update(inquire);
+        }
 
         await dbContext.SaveChangesAsync(ct);
+    }
+
+    private void ConstructApiOffersGetters()
+    {
+        apiOffersGetters = new()
+        {
+            serviceProvider.GetService<OurApiOffersGetter>()!,
+        };
+    }
+
+    private DbInquireData ToDbData(Inquire inquire)
+    {
+        return new()
+        {
+            Id = inquire.Id,
+            MoneyInSmallestUnit = inquire.MoneyInSmallestUnit,
+            NumberOfInstallments = inquire.NumberOfInstallments,
+            CreationTime = inquire.CreationTime,
+        };
     }
 }
