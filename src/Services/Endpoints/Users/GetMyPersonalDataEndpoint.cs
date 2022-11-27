@@ -22,6 +22,12 @@ public class GetMyPersonalDataEndpoint : Endpoint<GetMyPersonalData, PersonalDat
             .Users
             .FirstOrDefaultAsync(u => u.Id == req.UserId, ct);
 
-        await SendAsync(user?.PersonalData.ToNullableDto(), cancellation: ct);
+        if (user == null)
+        {
+            await SendNotFoundAsync(ct);
+            return;
+        }
+
+        await SendAsync(user.PersonalData.ToNullableDto(), cancellation: ct);
     }
 }
