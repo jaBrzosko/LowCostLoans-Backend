@@ -12,22 +12,22 @@ namespace Services.Events.Inquires;
 
 public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
 {
-    private readonly IServiceProvider serviceProvider;
-    private readonly CoreDbContext dbContext;
     private List<IApiOffersGetter> apiOffersGetters = null!;
+    private readonly IServiceScopeFactory scopeFactory;
 
-    public InquireCreatedHandler(IServiceProvider serviceProvider, CoreDbContext dbContext)
+    public InquireCreatedHandler(IServiceScopeFactory scopeFactory)
     {
-        this.serviceProvider = serviceProvider;
-        this.dbContext = dbContext;
+        this.scopeFactory = scopeFactory;
     }
 
     public async Task HandleAsync(InquireCreatedEvent eventModel, CancellationToken ct)
     {
-        ConstructApiOffersGetters();
-        var inquiriesRepository = serviceProvider.GetService<InquiresRepository>()!;
-        var offersRepository = serviceProvider.GetService<OffersRepository>()!;
-
+        using var scope = scopeFactory.CreateScope();
+        ConstructApiOffersGetters(scope);
+        var inquiriesRepository = scope.ServiceProvider.GetService<InquiresRepository>()!;
+        var offersRepository = scope.ServiceProvider.GetService<OffersRepository>()!;
+        var dbContext = scope.ServiceProvider.GetRequiredService<CoreDbContext>();
+        
         var inquire = await inquiriesRepository.FindAndEnsureExistence(eventModel.InquireId, ct);
 
         try
@@ -54,11 +54,11 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
         await dbContext.SaveChangesAsync(ct);
     }
 
-    private void ConstructApiOffersGetters()
+    private void ConstructApiOffersGetters(IServiceScope scope)
     {
         apiOffersGetters = new()
         {
-            serviceProvider.GetService<OurApiOffersGetter>()!,
+            scope.ServiceProvider.GetService<OurApiOffersGetter>()!,
         };
     }
 
