@@ -18,7 +18,7 @@ public class OurApiClient
 
     public async Task<List<ApiOfferData>> GetOffersAsync(Guid inquireId, CancellationToken ct)
     {
-        var response = await client.GetAsync($"offers/getOfferSByInquireId?Id={inquireId}", ct);
+        var response = await client.GetAsync($"offers/getOffersByInquireId?Id={inquireId}", ct);
         var offerList = await response.Content.ReadFromJsonAsync<OfferList>(cancellationToken: ct);
         return offerList?
             .Offers
