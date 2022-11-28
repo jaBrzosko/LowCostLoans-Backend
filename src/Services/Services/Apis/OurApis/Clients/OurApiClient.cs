@@ -13,7 +13,7 @@ public class OurApiClient
 
     public static void Configure(HttpClient client)
     {
-        client.BaseAddress = new Uri("http://localhost:8082"); // TODO: load it from configuration
+        client.BaseAddress = new Uri("http://api:80"); // TODO: load it from configuration
     }
 
     public async Task<List<ApiOfferData>> GetOffersAsync(Guid inquireId, CancellationToken ct)
