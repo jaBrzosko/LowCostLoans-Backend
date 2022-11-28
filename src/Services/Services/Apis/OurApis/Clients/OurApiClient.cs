@@ -50,7 +50,12 @@ public class OurApiClient
         };
         var content = JsonContent.Create(postInquire);
         var response = await client.PostAsync("inquiries/createInquireAsAnonymous", content, ct);
-        var inquireId = await response.Content.ReadFromJsonAsync<Guid>(cancellationToken: ct);
-        return inquireId;
+        var inquireId = await response.Content.ReadFromJsonAsync<IdClass>(cancellationToken: ct);
+        return inquireId.Id;
     }
+}
+
+public class IdClass
+{
+    public Guid Id { get; set; }
 }

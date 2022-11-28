@@ -5,14 +5,14 @@ namespace Domain.Inquires;
 public class Inquire
 {
     public Guid Id { get; private init; }
-    public Guid? UserId { get; private init; }
+    public string? UserId { get; private init; }
     public PersonalData? PersonalData { get; private init; }
     public int MoneyInSmallestUnit { get; private init; }
     public int NumberOfInstallments { get; private init; }
     public DateTime CreationTime { get; private init; }
     public InquireStatus Status { get; private set;  }
 
-    public Inquire(Guid? userId, PersonalData? personalData, int moneyInSmallestUnit, int numberOfInstallments)
+    public Inquire(string? userId, PersonalData? personalData, int moneyInSmallestUnit, int numberOfInstallments)
     {
         Validate(userId, personalData, moneyInSmallestUnit, numberOfInstallments);
         
@@ -28,7 +28,7 @@ public class Inquire
     private Inquire() 
     { }
 
-    private static void Validate(Guid? userId, PersonalData? personalData, int moneyInSmallestUnit, int numberOfInstallments)
+    private static void Validate(string? userId, PersonalData? personalData, int moneyInSmallestUnit, int numberOfInstallments)
     {
         if (!(userId is null ^ personalData is null))
         {

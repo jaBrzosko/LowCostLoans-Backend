@@ -20,3 +20,16 @@ public enum JobType
 {
     SomeJobType = 0,
 }
+
+public static class Mapper
+{
+    public static PersonalData ToPersonalData(this Domain.Users.PersonalData domainPersonalData)
+    {
+        return new(
+            domainPersonalData.FirstName,
+            domainPersonalData.LastName,
+            domainPersonalData.GovernmentId,
+            (GovernmentIdType)domainPersonalData.GovernmentIdType,
+            (JobType)domainPersonalData.JobType);
+    }
+}

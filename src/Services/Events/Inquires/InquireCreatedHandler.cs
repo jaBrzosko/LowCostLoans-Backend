@@ -26,6 +26,7 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
         ConstructApiOffersGetters(scope);
         var inquiriesRepository = scope.ServiceProvider.GetService<InquiresRepository>()!;
         var offersRepository = scope.ServiceProvider.GetService<OffersRepository>()!;
+        var usersRepository = scope.ServiceProvider.GetService<UsersRepository>()!;
         var dbContext = scope.ServiceProvider.GetRequiredService<CoreDbContext>();
         
         var inquire = await inquiriesRepository.FindAndEnsureExistence(eventModel.InquireId, ct);
@@ -34,7 +35,7 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
         {
             foreach (var offersGetter in apiOffersGetters)
             {
-                var apiOffers = await offersGetter.GetOffersAsync(ToDbData(inquire), ct);
+                var apiOffers = await offersGetter.GetOffersAsync(await GetDbInquireDataAsync(inquire, usersRepository, ct), ct);
                 foreach (var o in apiOffers)
                 {
                     var offer = new Offer(inquire.Id, o.InterestRateInPromiles, o.MoneyInSmallestUnit, o.NumberOfInstallments);
@@ -62,7 +63,7 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
         };
     }
 
-    private DbInquireData ToDbData(Inquire inquire)
+    private async Task<DbInquireData> GetDbInquireDataAsync(Inquire inquire, UsersRepository usersRepository, CancellationToken ct)
     {
         return new()
         {
@@ -70,6 +71,18 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
             MoneyInSmallestUnit = inquire.MoneyInSmallestUnit,
             NumberOfInstallments = inquire.NumberOfInstallments,
             CreationTime = inquire.CreationTime,
+            PersonalData = await GetPersonalDataAsync(inquire, usersRepository, ct),
         };
+    }
+
+    private async Task<PersonalData> GetPersonalDataAsync(Inquire inquire, UsersRepository usersRepository, CancellationToken ct)
+    {
+        if (inquire.PersonalData is not null)
+        {
+            return inquire.PersonalData.ToPersonalData();
+        }
+
+        var user = await usersRepository.FindAndEnsureExistence(inquire.UserId!, ct);
+        return user.PersonalData.ToPersonalData();
     }
 }
