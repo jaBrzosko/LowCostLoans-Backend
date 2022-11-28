@@ -1,10 +1,12 @@
-using Domain.Examples;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using Services.Data;
 using Services.Data.Repositories;
 using Services.ValidationExtensions;
-using Services.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Services.Data.Auth0;
+using Services.Services.Apis.OurApis;
+using Services.Services.Apis.OurApis.Clients;
 
 namespace Api;
 
@@ -13,14 +15,51 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        
         builder.Services.AddDbContext<CoreDbContext>();
-        builder.Services.AddScoped<ExampleService>();
-        builder.Services.AddScoped<Repository<Example>>();
+        
+        builder.Services.AddHttpClient<Auth0Client>().ConfigureHttpClient(client =>
+        {
+            client.BaseAddress = new Uri(builder.Configuration["Auth0ApiUrl"]);
+        });
+        builder.Services.AddHttpClient<OurApiClient>().ConfigureHttpClient(OurApiClient.Configure);
+        
+        builder.Services.AddScoped<ExamplesRepository>();
+        builder.Services.AddScoped<InquiresRepository>();
+        builder.Services.AddScoped<OffersRepository>();
+        builder.Services.AddScoped<UsersRepository>();
+        
+        builder.Services.AddScoped<OurApiOffersGetter>();
+        
         builder.Services.AddFastEndpoints();
         builder.Services.AddSwaggerDoc();
+        // CORS
+        builder.Services.AddCors(options =>
+            options.AddDefaultPolicy(policy =>
+                {
+                    policy.SetIsOriginAllowed(host => host.StartsWith(builder.Configuration["FrontendPrefix"]))
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials();
+                }));
+
+        // Auth0
+        builder.Services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(options =>
+        {
+            options.Authority = builder.Configuration["JwtAuthority"];
+            options.Audience = builder.Configuration["JwtAudience"];
+        });
+
         var app = builder.Build();
 
+        app.UseCors();
+        app.UseAuthentication();
         app.UseAuthorization();
+
         app.UseFastEndpoints(c =>
         {
             c.Errors.ResponseBuilder = (failures, ctx, statusCode) =>
@@ -31,7 +70,7 @@ public class Program
                     Errors = failures
                         .Select(f => new Error
                         {
-                            ErrorCode = int.Parse(f.ErrorCode),
+                            ErrorCode = 0,
                             ErrorMessage = f.ErrorMessage,
                         })
                         .ToList(),

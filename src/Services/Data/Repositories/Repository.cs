@@ -1,29 +1,62 @@
+using Domain;
+using Domain.Examples;
+using Microsoft.EntityFrameworkCore;
+
 namespace Services.Data.Repositories;
 
-public class Repository<TEntity> where TEntity : class
+public abstract class Repository<TEntity, TId> where TEntity : class
 {
-    private readonly CoreDbContext dbContext;
+    protected readonly CoreDbContext DbContext;
 
     public Repository(CoreDbContext dbContext)
     {
-        this.dbContext = dbContext;
+        DbContext = dbContext;
     }
 
     public async Task AddAsync(TEntity entity, CancellationToken ct)
     {
-        dbContext.Set<TEntity>().Add(entity);
-        await dbContext.SaveChangesAsync(ct);
+        DbContext.Set<TEntity>().Add(entity);
+        await DbContext.SaveChangesAsync(ct);
     }
 
     public async Task UpdateAsync(TEntity entity, CancellationToken ct)
     {
-        dbContext.Set<TEntity>().Update(entity);
-        await dbContext.SaveChangesAsync(ct);
+        DbContext.Set<TEntity>().Update(entity);
+        await DbContext.SaveChangesAsync(ct);
     }
     
     public async Task RemoveAsync(TEntity entity, CancellationToken ct)
     {
-        dbContext.Set<TEntity>().Remove(entity);
-        await dbContext.SaveChangesAsync(ct);
+        DbContext.Set<TEntity>().Remove(entity);
+        await DbContext.SaveChangesAsync(ct);
+    }
+
+    public abstract Task<TEntity?> FindAsync(TId id, CancellationToken ct);
+
+    public async Task<TEntity> FindAndEnsureExistence(TId id, CancellationToken ct)
+    {
+        var result = await FindAsync(id, ct);
+
+        if (result is null)
+        {
+            throw new ArgumentException("Entity with this Id does not exist");
+        }
+
+        return result;
+    }
+    
+    public void Add(TEntity entity)
+    {
+        DbContext.Set<TEntity>().Add(entity);
+    }
+
+    public void Update(TEntity entity)
+    {
+        DbContext.Set<TEntity>().Update(entity);
+    }
+    
+    public void Remove(TEntity entity)
+    {
+        DbContext.Set<TEntity>().Remove(entity);
     }
 }

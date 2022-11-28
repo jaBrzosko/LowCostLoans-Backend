@@ -9,9 +9,9 @@ namespace Services.Endpoints.Examples;
 
 public class PostExampleEndpoint : Endpoint<PostExample>
 {
-    private readonly Repository<Example> examplesRepository;
+    private readonly ExamplesRepository examplesRepository;
     
-    public PostExampleEndpoint(Repository<Example> examplesRepository)
+    public PostExampleEndpoint(ExamplesRepository examplesRepository)
     {
         this.examplesRepository = examplesRepository;
     }
