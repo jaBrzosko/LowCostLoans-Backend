@@ -6,3 +6,9 @@ services:
     build: .
     ports:
       - "8081:80"
+  api:
+    container_name: api
+    image: apt-backend-dotnet
+    build: ../../API/src
+    ports:
+      - "8082:80"
