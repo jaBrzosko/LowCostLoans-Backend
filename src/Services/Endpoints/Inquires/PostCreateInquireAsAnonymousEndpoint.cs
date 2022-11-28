@@ -24,7 +24,7 @@ public class PostCreateInquireAsAnonymousEndpoint : Endpoint<PostCreateInquireAs
     {
         var inquire = new Inquire(null, req.PersonalData.ToNullableEntity(), req.MoneyInSmallestUnit, req.NumberOfInstallments);
         await inquiriesRepository.AddAsync(inquire, ct);
-        await PublishAsync(new InquireCreatedEvent { InquireId = inquire.Id }, cancellation: ct);
+        await PublishAsync(new InquireCreatedEvent { InquireId = inquire.Id }, Mode.WaitForNone, ct);
         var response = new PostResponseWithIdDto { Id = inquire.Id };
         await SendAsync(response, cancellation: ct);
     }

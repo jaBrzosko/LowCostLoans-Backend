@@ -3,10 +3,10 @@ using FastEndpoints.Swagger;
 using Services.Data;
 using Services.Data.Repositories;
 using Services.ValidationExtensions;
-using Services.Services;
-
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Services.Data.Auth0;
+using Services.Services.Apis.OurApis;
+using Services.Services.Apis.OurApis.Clients;
 
 namespace Api;
 
@@ -15,16 +15,22 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        
         builder.Services.AddDbContext<CoreDbContext>();
+        
         builder.Services.AddHttpClient<Auth0Client>().ConfigureHttpClient(client =>
         {
             client.BaseAddress = new Uri(builder.Configuration["Auth0ApiUrl"]);
         });
-        builder.Services.AddScoped<ExampleService>();
+        builder.Services.AddHttpClient<OurApiClient>().ConfigureHttpClient(OurApiClient.Configure);
+        
         builder.Services.AddScoped<ExamplesRepository>();
         builder.Services.AddScoped<InquiresRepository>();
         builder.Services.AddScoped<OffersRepository>();
         builder.Services.AddScoped<UsersRepository>();
+        
+        builder.Services.AddScoped<OurApiOffersGetter>();
+        
         builder.Services.AddFastEndpoints();
         builder.Services.AddSwaggerDoc();
         // CORS
