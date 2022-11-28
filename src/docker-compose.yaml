@@ -4,6 +4,8 @@ services:
     container_name: backend
     image: backend-dotnet
     build: .
+    depends_on:
+      - api
     ports:
       - "8081:80"
   api:
