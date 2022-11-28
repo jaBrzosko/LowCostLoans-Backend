@@ -6,7 +6,6 @@ using Services.Data;
 using Services.Data.Repositories;
 using Services.Services.Apis;
 using Services.Services.Apis.OurApis;
-using Inquire = Domain.Inquires.Inquire;
 
 namespace Services.Events.Inquires;
 
@@ -71,18 +70,18 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
             MoneyInSmallestUnit = inquire.MoneyInSmallestUnit,
             NumberOfInstallments = inquire.NumberOfInstallments,
             CreationTime = inquire.CreationTime,
-            PersonalData = await GetPersonalDataAsync(inquire, usersRepository, ct),
+            DbPersonalData = await GetPersonalDataAsync(inquire, usersRepository, ct),
         };
     }
 
-    private async Task<PersonalData> GetPersonalDataAsync(Inquire inquire, UsersRepository usersRepository, CancellationToken ct)
+    private async Task<DbPersonalData> GetPersonalDataAsync(Inquire inquire, UsersRepository usersRepository, CancellationToken ct)
     {
         if (inquire.PersonalData is not null)
         {
-            return inquire.PersonalData.ToPersonalData();
+            return inquire.PersonalData.ToDbPersonalData();
         }
 
         var user = await usersRepository.FindAndEnsureExistence(inquire.UserId!, ct);
-        return user.PersonalData.ToPersonalData();
+        return user.PersonalData.ToDbPersonalData();
     }
 }

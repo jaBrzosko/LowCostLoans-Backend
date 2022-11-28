@@ -1,6 +1,6 @@
 namespace Services.Services.Apis.OurApis.Clients;
 
-internal class Inquire
+internal class InquireRequest
 {
     public int MoneyInSmallestUnit { get; set; }
     public int NumberOfInstallments { get; set; }

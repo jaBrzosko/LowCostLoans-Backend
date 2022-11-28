@@ -35,27 +35,22 @@ public class OurApiClient
 
     public async Task<Guid?> PostInquireAsync(DbInquireData inquireData, CancellationToken ct)
     {
-        var postInquire = new Inquire
+        var postInquire = new InquireRequest
         {
             MoneyInSmallestUnit = inquireData.MoneyInSmallestUnit,
             NumberOfInstallments = inquireData.NumberOfInstallments,
             PersonalData = new()
             {
-                FirstName = inquireData.PersonalData.FirstName,
-                LastName = inquireData.PersonalData.LastName,
-                GovernmentId = inquireData.PersonalData.GovernmentId,
-                GovernmentIdType = (GovernmentIdTypeDto)inquireData.PersonalData.GovernmentIdType,
-                JobType = (JobTypeDto)inquireData.PersonalData.JobType,
+                FirstName = inquireData.DbPersonalData.FirstName,
+                LastName = inquireData.DbPersonalData.LastName,
+                GovernmentId = inquireData.DbPersonalData.GovernmentId,
+                GovernmentIdType = (GovernmentIdTypeDto)inquireData.DbPersonalData.GovernmentIdType,
+                JobType = (JobTypeDto)inquireData.DbPersonalData.JobType,
             },
         };
         var content = JsonContent.Create(postInquire);
         var response = await client.PostAsync("inquiries/createInquireAsAnonymous", content, ct);
-        var inquireId = await response.Content.ReadFromJsonAsync<IdClass>(cancellationToken: ct);
-        return inquireId.Id;
+        var inquire = await response.Content.ReadFromJsonAsync<InquireResponse>(cancellationToken: ct);
+        return inquire!.Id;
     }
-}
-
-public class IdClass
-{
-    public Guid Id { get; set; }
 }

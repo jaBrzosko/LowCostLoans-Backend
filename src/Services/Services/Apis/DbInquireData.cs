@@ -3,33 +3,20 @@ namespace Services.Services.Apis;
 public class DbInquireData
 {
     public Guid Id { get; set; }
-    public PersonalData PersonalData { get; set; }
+    public DbPersonalData DbPersonalData { get; set; }
     public int MoneyInSmallestUnit { get; set; }
     public int NumberOfInstallments { get; set; }
     public DateTime CreationTime { get; set; }
 }
 
-public record PersonalData(string FirstName, string LastName, string GovernmentId, GovernmentIdType GovernmentIdType, JobType JobType);
+public record DbPersonalData(string FirstName, string LastName, string GovernmentId, DbGovernmentIdType GovernmentIdType, DbJobType JobType);
 
-public enum GovernmentIdType
+public enum DbGovernmentIdType
 {
     Pesel = 0,
 }
 
-public enum JobType
+public enum DbJobType
 {
     SomeJobType = 0,
-}
-
-public static class Mapper
-{
-    public static PersonalData ToPersonalData(this Domain.Users.PersonalData domainPersonalData)
-    {
-        return new(
-            domainPersonalData.FirstName,
-            domainPersonalData.LastName,
-            domainPersonalData.GovernmentId,
-            (GovernmentIdType)domainPersonalData.GovernmentIdType,
-            (JobType)domainPersonalData.JobType);
-    }
 }
