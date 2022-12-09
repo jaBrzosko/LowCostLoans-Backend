@@ -6,10 +6,12 @@ services:
     build: .
     depends_on:
       - api
+      - backend-postgres
     ports:
       - "8081:80"
     networks:
       - api-network
+      - backend-db
   api:
     container_name: api
     image: apt-backend-dotnet
@@ -18,8 +20,21 @@ services:
       - "8082:80"
     networks:
       - api-network
-
+  backend-postgres:
+      container_name: backend-database
+      image: "postgres:latest"
+      environment:
+        - POSTGRES_PASSWORD=password
+        - POSTGRES_DB=backend
+        - POSTGRES_USER=admin
+      networks:
+        - backend-db
+      volumes:
+        - /var/loans/postgres:/var/lib/postgresql/data
 networks:
   api-network:
     name: api-network
+    driver: bridge
+  backend-db:
+    name: backend-db
     driver: bridge
