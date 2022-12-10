@@ -1,4 +1,3 @@
-using System.Runtime;
 using Domain.Examples;
 using Domain.Inquires;
 using Domain.Offers;
@@ -14,10 +13,8 @@ public class CoreDbContext : DbContext
     public DbSet<Inquire> Inquiries { get; set; }
     public DbSet<Offer> Offers { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseNpgsql(@"Host=backend-database;Username=admin;Password=password;Database=backend");
-    }
+    public CoreDbContext(DbContextOptions<CoreDbContext> options) : base(options)
+    { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -11,7 +11,7 @@ public class Auth0Client
     public Auth0Client(HttpClient client) =>
         this.client = client;
     
-    public async Task<Auth0Profile?> GetProfile(string token)
+    public virtual async Task<Auth0Profile?> GetProfile(string token)
     {
         client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         var response = await client.GetAsync((string?)null);

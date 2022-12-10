@@ -17,8 +17,10 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
         
-        builder.Services.AddDbContext<CoreDbContext>();
-        
+        builder.Services.AddDbContext<CoreDbContext>(
+            opts => opts.UseNpgsql(@"Host=backend-database;Username=admin;Password=password;Database=backend")
+        );
+
         builder.Services.AddHttpClient<Auth0Client>().ConfigureHttpClient(client =>
         {
             client.BaseAddress = new Uri(builder.Configuration["Auth0ApiUrl"]);
@@ -80,7 +82,7 @@ public class Program
         });
         app.UseOpenApi();
         app.UseSwaggerUi3(s => s.ConfigureDefaults());
-
+        
         using (var scope = app.Services.CreateScope())
         {
             var services = scope.ServiceProvider;
@@ -91,7 +93,7 @@ public class Program
                 context.Database.Migrate();
             }
         }
-        
+
         app.Run();
     }
 }

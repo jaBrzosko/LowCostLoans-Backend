@@ -16,7 +16,7 @@ public class OurApiClient
         client.BaseAddress = new Uri("http://api:80"); // TODO: load it from configuration
     }
 
-    public async Task<List<ApiOfferData>> GetOffersAsync(Guid inquireId, CancellationToken ct)
+    public virtual async Task<List<ApiOfferData>> GetOffersAsync(Guid inquireId, CancellationToken ct)
     {
         var response = await client.GetAsync($"offers/getOffersByInquireId?Id={inquireId}", ct);
         var offerList = await response.Content.ReadFromJsonAsync<OfferList>(cancellationToken: ct);
@@ -33,7 +33,7 @@ public class OurApiClient
             new();
     }
 
-    public async Task<Guid?> PostInquireAsync(DbInquireData inquireData, CancellationToken ct)
+    public virtual async Task<Guid?> PostInquireAsync(DbInquireData inquireData, CancellationToken ct)
     {
         var postInquire = new InquireRequest
         {
