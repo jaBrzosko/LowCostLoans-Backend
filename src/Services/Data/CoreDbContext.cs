@@ -1,4 +1,3 @@
-using System.Runtime;
 using Domain.Examples;
 using Domain.Inquires;
 using Domain.Offers;
@@ -16,7 +15,7 @@ public class CoreDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql(@"Host=backend-database;Username=admin;Password=password;Database=backend");
+        optionsBuilder.UseInMemoryDatabase(databaseName: "CoreDb");
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

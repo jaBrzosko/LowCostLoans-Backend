@@ -4,7 +4,6 @@ using Services.Data;
 using Services.Data.Repositories;
 using Services.ValidationExtensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
 using Services.Data.Auth0;
 using Services.Services.Apis.OurApis;
 using Services.Services.Apis.OurApis.Clients;
@@ -81,17 +80,6 @@ public class Program
         app.UseOpenApi();
         app.UseSwaggerUi3(s => s.ConfigureDefaults());
 
-        using (var scope = app.Services.CreateScope())
-        {
-            var services = scope.ServiceProvider;
-
-            var context = services.GetRequiredService<CoreDbContext>();
-            if (context.Database.GetPendingMigrations().Any())
-            {
-                context.Database.Migrate();
-            }
-        }
-        
         app.Run();
     }
 }
