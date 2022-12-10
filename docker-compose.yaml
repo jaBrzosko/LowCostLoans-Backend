@@ -18,6 +18,8 @@ services:
     build: ../API
     ports:
       - "8082:80"
+    depends_on:
+      - api-postgres
     networks:
       - api-network
       - api-db
