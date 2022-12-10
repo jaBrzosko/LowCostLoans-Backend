@@ -1,0 +1,25 @@
+version: "3.5"
+services:
+  server:
+    container_name: backend
+    image: backend-dotnet
+    build: .
+    depends_on:
+      - api
+    ports:
+      - "8081:80"
+    networks:
+      - api-network
+  api:
+    container_name: api
+    image: apt-backend-dotnet
+    build: ../../API/src
+    ports:
+      - "8082:80"
+    networks:
+      - api-network
+
+networks:
+  api-network:
+    name: api-network
+    driver: bridge
