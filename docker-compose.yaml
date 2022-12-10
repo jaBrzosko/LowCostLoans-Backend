@@ -14,12 +14,13 @@ services:
       - backend-db
   api:
     container_name: api
-    image: apt-backend-dotnet
-    build: ../API/src
+    image: api-backend-dotnet
+    build: ../API
     ports:
       - "8082:80"
     networks:
       - api-network
+      - api-db
   backend-postgres:
       container_name: backend-database
       image: "postgres:latest"
@@ -31,10 +32,24 @@ services:
         - backend-db
       volumes:
         - /var/loans/postgres:/var/lib/postgresql/data
+  api-postgres:
+      container_name: api-database
+      image: "postgres:latest"
+      environment:
+        - POSTGRES_PASSWORD=password
+        - POSTGRES_DB=api
+        - POSTGRES_USER=admin
+      networks:
+        - api-db
+      volumes:
+        - /var/loans/postgres-api:/var/lib/postgresql/data
 networks:
   api-network:
     name: api-network
     driver: bridge
   backend-db:
     name: backend-db
+    driver: bridge
+  api-db:
+    name: api-db
     driver: bridge
