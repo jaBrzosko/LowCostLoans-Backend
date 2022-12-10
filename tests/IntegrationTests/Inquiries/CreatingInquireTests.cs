@@ -33,7 +33,7 @@ public class CreatingInquireTests : TestBase
         var postResult = await Client
             .POSTAsync<PostCreateInquireAsAnonymousEndpoint, PostCreateInquireAsAnonymous, PostResponseWithIdDto>(createInquire);
 
-        postResult.response!.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        postResult.response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
     
     [Fact]
@@ -55,7 +55,7 @@ public class CreatingInquireTests : TestBase
         var postResult = await Client
             .POSTAsync<PostCreateInquireAsAnonymousEndpoint, PostCreateInquireAsAnonymous, PostResponseWithIdDto>(createInquire);
 
-        postResult.response!.StatusCode.Should().Be(HttpStatusCode.OK);
+        postResult.response.StatusCode.Should().Be(HttpStatusCode.OK);
         postResult.result.Should().NotBeNull();
 
         var getInquireDetails = new GetInquireDetailsById()
@@ -66,9 +66,9 @@ public class CreatingInquireTests : TestBase
         var getResult = await Client
             .GETAsync<GetInquireDetailsByIdEndpoint, GetInquireDetailsById, InquireDetailsDto>(getInquireDetails);
         
-        getResult.response!.StatusCode.Should().Be(HttpStatusCode.OK);
+        getResult.response.StatusCode.Should().Be(HttpStatusCode.OK);
         getResult.result.Should().NotBeNull();
-        getResult.result!.Offers.Count.Should().BePositive();
+        getResult.result.Offers.Count.Should().BePositive();
         getResult.result.Id.Should().Be(postResult.result.Id);
     }
 }
