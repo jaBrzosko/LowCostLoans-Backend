@@ -23,6 +23,9 @@ services:
     networks:
       - api-network
       - api-db
+    env_file:
+      - ../API/variables.env
+      - ../API/secrets.env
   backend-postgres:
       container_name: backend-database
       image: "postgres:latest"
