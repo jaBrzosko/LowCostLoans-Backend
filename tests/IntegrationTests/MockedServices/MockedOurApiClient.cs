@@ -22,4 +22,9 @@ public class MockedOurApiClient : OurApiClient
     {
         return Task.FromResult<Guid?>(new Guid());
     }
+
+    public override Task<Uri> GetOfferContract(CancellationToken ct)
+    {
+        return Task.FromResult(new Uri("/url/to/contract"));
+    }
 }
