@@ -24,9 +24,10 @@ public class GetInquireByUserEndpoint: Endpoint<GetInquireByUser, PaginationResu
     public override async Task HandleAsync(GetInquireByUser req, CancellationToken ct)
     {
         int start = req.PageNumber * Math.Clamp(req.PageSize, minPageSize, maxPageSize);
-        var inqs = await dbContext
+        var query = dbContext
             .Inquiries
-            .Where(u => u.Id == req.UserId)
+            .Where(u => u.Id == req.UserId);
+        var inqs = await query
             .Skip(start)
             .Take(Math.Clamp(req.PageSize, minPageSize, maxPageSize))
             .Select(iq => new InquireDetailsDto
@@ -51,9 +52,7 @@ public class GetInquireByUserEndpoint: Endpoint<GetInquireByUser, PaginationResu
                     .ToList(),
             })
             .ToListAsync(ct);
-        var count = await dbContext
-            .Inquiries
-            .Where(u => u.Id == req.UserId)
+        var count = await query
             .CountAsync(ct);
         var result = new PaginationResultDto<InquireDetailsDto>
         {
