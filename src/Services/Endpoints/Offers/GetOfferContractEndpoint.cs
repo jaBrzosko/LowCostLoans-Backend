@@ -1,4 +1,5 @@
 using Contracts.Offers;
+using Domain.Offers;
 using FastEndpoints;
 using Microsoft.AspNetCore.Authorization;
 using Services.Data.Repositories;
@@ -23,10 +24,12 @@ public class GetOfferContractEndpoint : Endpoint<GetOfferContract, ContractDto>
     {
         var offer = await offersRepository.FindAndEnsureExistence(req.OfferId, ct);
 
-        var result = new ContractDto
+        var result = new ContractDto();
+        
+        if(offer.SourceBank == OfferSourceBank.OurBank)
         {
-            ContractUrl = await ourApiClient.GetOfferContract(ct),
-        };
+            result.ContractUrl = await ourApiClient.GetOfferContract(ct);
+        }
 
         await SendAsync(result, cancellation: ct);
     }
