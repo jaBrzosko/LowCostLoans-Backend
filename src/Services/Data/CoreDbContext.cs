@@ -77,6 +77,7 @@ public class CoreDbContext : DbContext
             cfg.Property(e => e.InterestRateInPromiles);
             cfg.Property(e => e.MoneyInSmallestUnit);
             cfg.Property(e => e.NumberOfInstallments);
+            cfg.Property(e => e.SourceBank).HasDefaultValue(OfferSourceBank.OurBank);
             cfg.Property(e => e.CreationTime);
         });
     }

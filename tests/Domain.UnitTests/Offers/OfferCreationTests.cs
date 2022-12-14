@@ -14,7 +14,7 @@ public class OfferCreationTests
         int expectedMoney = 10_000;
         int expectedNumberOfInstallments = 12;
         
-        var actualOffer = new Offer(expectedInquireId, expectedInterestRate, expectedMoney, expectedNumberOfInstallments);
+        var actualOffer = new Offer(expectedInquireId, expectedInterestRate, expectedMoney, expectedNumberOfInstallments, OfferSourceBank.OurBank);
 
         actualOffer.InquireId.Should().Be(expectedInquireId);
         actualOffer.InterestRateInPromiles.Should().Be(expectedInterestRate);
@@ -48,7 +48,7 @@ public class OfferCreationTests
     
     private void TestThrowingArgumentException(Guid inquireId, int interestRate, int money, int numberOfInstallments)
     {
-        var action = () => { new Offer(inquireId, interestRate, money, numberOfInstallments); };
+        var action = () => { new Offer(inquireId, interestRate, money, numberOfInstallments, OfferSourceBank.OurBank); };
         action.Should().Throw<ArgumentException>();
     }
 }
