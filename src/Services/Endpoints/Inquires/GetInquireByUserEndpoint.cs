@@ -22,6 +22,18 @@ public class GetInquireByUserEndpoint: Endpoint<GetInquireByUser, PaginationResu
 
     public override async Task HandleAsync(GetInquireByUser req, CancellationToken ct)
     {
+        if (string.IsNullOrEmpty(req.UserId))
+        {
+            var resultEmpty = new PaginationResultDto<InquireDetailsDto>
+            {
+                Results = new List<InquireDetailsDto>(),
+                Offset = 0,
+                TotalCount = 0
+            };
+            await SendAsync(resultEmpty, cancellation: ct);
+            return;
+        }
+        
         int start = req.PageNumber * Math.Clamp(req.PageSize, minPageSize, maxPageSize);
         var query = dbContext
             .Inquiries
