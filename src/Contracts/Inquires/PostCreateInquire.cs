@@ -6,7 +6,7 @@ public class PostCreateInquire
 {
     public int MoneyInSmallestUnit { get; set; }
     public int NumberOfInstallments { get; set; }
-    public Guid UserId { get; set; }
+    public string UserId { get; set; }
 
     public static class ErrorCodes
     {

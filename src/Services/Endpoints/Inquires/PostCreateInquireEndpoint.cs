@@ -22,7 +22,7 @@ public class PostCreateInquireEndpoint : Endpoint<PostCreateInquire, PostRespons
 
     public override async Task HandleAsync(PostCreateInquire req, CancellationToken ct)
     {
-        var inquire = new Inquire(req.UserId.ToString(), null, req.MoneyInSmallestUnit, req.NumberOfInstallments);
+        var inquire = new Inquire(req.UserId, null, req.MoneyInSmallestUnit, req.NumberOfInstallments);
         await inquiriesRepository.AddAsync(inquire, ct);
         await PublishAsync(new InquireCreatedEvent { InquireId = inquire.Id }, Mode.WaitForNone, ct);
         var response = new PostResponseWithIdDto { Id = inquire.Id };
