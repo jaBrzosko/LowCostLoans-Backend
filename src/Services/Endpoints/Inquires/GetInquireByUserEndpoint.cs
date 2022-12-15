@@ -9,7 +9,6 @@ using Services.Data;
 namespace Services.Endpoints.Inquires;
 
 [HttpGet("/inquiries/getInquireByUser")]
-[AllowAnonymous]
 public class GetInquireByUserEndpoint: Endpoint<GetInquireByUser, PaginationResultDto<InquireDetailsDto>>
 {
     private readonly CoreDbContext dbContext;
