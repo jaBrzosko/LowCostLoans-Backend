@@ -26,7 +26,7 @@ public class GetInquireByUserEndpoint: Endpoint<GetInquireByUser, PaginationResu
         int start = req.PageNumber * Math.Clamp(req.PageSize, minPageSize, maxPageSize);
         var query = dbContext
             .Inquiries
-            .Where(u => u.Id == req.UserId);
+            .Where(u => u.UserId == req.UserId);
         var inqs = await query
             .Skip(start)
             .Take(Math.Clamp(req.PageSize, minPageSize, maxPageSize))
