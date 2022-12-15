@@ -1,5 +1,7 @@
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Contracts.Offers;
+using Microsoft.AspNetCore.Http;
 
 namespace Services.Services.Apis.OurApis.Clients;
 
@@ -63,9 +65,21 @@ public class OurApiClient
         return contract!.ContractUrl;
     }
 
-    public virtual async Task PostAcceptOffer(AcceptOfferDto acceptDto, CancellationToken ct)
+    public virtual async Task PostAcceptOffer(string offerId, IFormFile file, CancellationToken ct)
     {
-        var content = JsonContent.Create(acceptDto);
+        var content = new MultipartFormDataContent();
+
+        var offerIdContent = new StringContent(offerId);
+        content.Add(offerIdContent, "OfferId");
+
+        var contractContent = new StreamContent(file.OpenReadStream());
+        contractContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+        {
+            Name = "Contract",
+            FileName = file.FileName
+        };
+        content.Add(contractContent);
+
         await client.PostAsync("offers/accept", content, ct);
     }
 }
