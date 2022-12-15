@@ -37,7 +37,7 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
                 var apiOffers = await offersGetter.GetOffersAsync(await GetDbInquireDataAsync(inquire, usersRepository, ct), ct);
                 foreach (var o in apiOffers)
                 {
-                    var offer = new Offer(inquire.Id, o.InterestRateInPromiles, o.MoneyInSmallestUnit, o.NumberOfInstallments);
+                    var offer = new Offer(inquire.Id, o.InterestRateInPromiles, o.MoneyInSmallestUnit, o.NumberOfInstallments, OfferSourceBank.OurBank);
                     offersRepository.Add(offer);
                 }
             }

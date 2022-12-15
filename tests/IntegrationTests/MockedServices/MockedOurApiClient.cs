@@ -5,6 +5,8 @@ namespace IntegrationTests.MockedServices;
 
 public class MockedOurApiClient : OurApiClient
 {
+    public readonly static Uri UrlToContract = new("/url/to/our/api/contract", UriKind.Relative);
+    
     public MockedOurApiClient(HttpClient client) : base(client)
     { }
 
@@ -21,5 +23,10 @@ public class MockedOurApiClient : OurApiClient
     public override Task<Guid?> PostInquireAsync(DbInquireData inquireData, CancellationToken ct)
     {
         return Task.FromResult<Guid?>(new Guid());
+    }
+
+    public override Task<Uri> GetOfferContract(CancellationToken ct)
+    {
+        return Task.FromResult(UrlToContract);
     }
 }

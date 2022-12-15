@@ -53,4 +53,11 @@ public class OurApiClient
         var inquire = await response.Content.ReadFromJsonAsync<InquireResponse>(cancellationToken: ct);
         return inquire!.Id;
     }
+
+    public virtual async Task<Uri> GetOfferContract(CancellationToken ct)
+    {
+        var response = await client.GetAsync("offers/getOfferContract", ct);
+        var contract = await response.Content.ReadFromJsonAsync<Contract>(cancellationToken: ct);
+        return contract!.ContractUrl;
+    }
 }
