@@ -28,6 +28,7 @@ public class OurApiClient
                 InterestRateInPromiles = o.InterestRate,
                 MoneyInSmallestUnit = offerList.MoneyInSmallestUnit,
                 NumberOfInstallments = offerList.NumberOfInstallments,
+                BankId = o.Id.ToString()
             })
             .ToList()
             ??
@@ -64,7 +65,7 @@ public class OurApiClient
 
     public virtual async Task PostAcceptOffer(AcceptOfferDto acceptDto, CancellationToken ct)
     {
-        // var content = JsonContent.Create(acceptDto);
-        // await client.PostAsync("offers/accept", content, ct);
+        var content = JsonContent.Create(acceptDto);
+        await client.PostAsync("offers/accept", content, ct);
     }
 }
