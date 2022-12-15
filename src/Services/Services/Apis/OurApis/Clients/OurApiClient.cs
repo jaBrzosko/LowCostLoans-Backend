@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using Contracts.Offers;
 
 namespace Services.Services.Apis.OurApis.Clients;
 
@@ -59,5 +60,11 @@ public class OurApiClient
         var response = await client.GetAsync("offers/getOfferContract", ct);
         var contract = await response.Content.ReadFromJsonAsync<Contract>(cancellationToken: ct);
         return contract!.ContractUrl;
+    }
+
+    public virtual async Task PostAcceptOffer(AcceptOfferDto acceptDto, CancellationToken ct)
+    {
+        // var content = JsonContent.Create(acceptDto);
+        // await client.PostAsync("offers/accept", content, ct);
     }
 }
