@@ -28,18 +28,8 @@ public class PostAcceptOfferEndpoint: Endpoint<PostAcceptOffer>
 
     public override async Task HandleAsync(PostAcceptOffer req, CancellationToken ct)
     {
-        Domain.Offers.Offer offer;
-        try
-        {
-            offer = await offersRepository.FindAndEnsureExistence(req.OfferId, ct);
-        }
-        catch (ArgumentException)
-        {
-            var errorResponse = new { errorCode = PostAcceptOffer.ErrorCodes.OfferDoesNotExist, errorMessage = "Offer Does Not Exist" };
-            await SendAsync(errorResponse, (int)HttpStatusCode.BadRequest, cancellation: ct);
-            return;
-        }
-        
+        var offer = await offersRepository.FindAndEnsureExistence(req.OfferId, ct);
+
         if (offer.SourceBank == OfferSourceBank.OurBank)
         {
             // TODO: Handle it via event
