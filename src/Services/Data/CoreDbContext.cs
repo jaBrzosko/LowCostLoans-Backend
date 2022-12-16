@@ -57,6 +57,8 @@ public class CoreDbContext : DbContext
                 inner.Property(e => e.GovernmentIdType);
                 inner.Property(e => e.JobType);
             });
+
+            cfg.HasIndex(e => e.UserId);
         });
     }
     
@@ -72,6 +74,8 @@ public class CoreDbContext : DbContext
             cfg.Property(e => e.SourceBank).HasDefaultValue(OfferSourceBank.OurBank);
             cfg.Property(e => e.CreationTime);
             cfg.Property(e => e.BankId).HasMaxLength(StringLengths.ShortString);
+
+            cfg.HasIndex(e => e.InquireId);
         });
     }
 }
