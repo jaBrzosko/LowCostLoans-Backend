@@ -11,5 +11,6 @@ public class PostAcceptOffer
     {
         public const int FileHasToBeSmallerThan16MB = 1;
         public const int FileCanNotBeEmpty = 2;
+        public const int OfferDoesNotExist = 3;
     }
 }

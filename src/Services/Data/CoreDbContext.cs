@@ -79,7 +79,7 @@ public class CoreDbContext : DbContext
             cfg.Property(e => e.NumberOfInstallments);
             cfg.Property(e => e.SourceBank).HasDefaultValue(OfferSourceBank.OurBank);
             cfg.Property(e => e.CreationTime);
-            cfg.Property(e => e.BankId);
+            cfg.Property(e => e.BankId).HasMaxLength(StringLengths.ShortString);
         });
     }
 }

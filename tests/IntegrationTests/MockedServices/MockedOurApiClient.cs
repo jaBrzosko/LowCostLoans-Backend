@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Services.Services.Apis;
 using Services.Services.Apis.OurApis.Clients;
 
@@ -28,5 +29,10 @@ public class MockedOurApiClient : OurApiClient
     public override Task<Uri> GetOfferContract(CancellationToken ct)
     {
         return Task.FromResult(UrlToContract);
+    }
+
+    public override Task PostAcceptOffer(string offerId, IFormFile file, CancellationToken ct)
+    {
+        return Task.CompletedTask;
     }
 }
