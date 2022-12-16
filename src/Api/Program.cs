@@ -18,7 +18,7 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
         
         builder.Services.AddDbContext<CoreDbContext>(
-            opts => opts.UseNpgsql(@"Host=backend-database;Username=admin;Password=password;Database=backend")
+            opts => opts.UseNpgsql(builder.Configuration["DatabaseConnectionString"])
         );
 
         builder.Services.AddHttpClient<Auth0Client>().ConfigureHttpClient(client =>
