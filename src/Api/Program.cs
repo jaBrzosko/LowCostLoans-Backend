@@ -27,7 +27,6 @@ public class Program
         });
         builder.Services.AddHttpClient<OurApiClient>().ConfigureHttpClient(OurApiClient.Configure);
         
-        builder.Services.AddScoped<ExamplesRepository>();
         builder.Services.AddScoped<InquiresRepository>();
         builder.Services.AddScoped<OffersRepository>();
         builder.Services.AddScoped<UsersRepository>();
