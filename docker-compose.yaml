@@ -12,6 +12,8 @@ services:
     networks:
       - api-network
       - backend-db
+    env_file:
+      - variables.env
   api:
     container_name: api
     image: api-backend-dotnet

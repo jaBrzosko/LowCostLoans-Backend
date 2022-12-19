@@ -8,7 +8,6 @@ namespace Services.Data;
 
 public class CoreDbContext : DbContext
 {
-    public DbSet<Example> Examples { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Inquire> Inquiries { get; set; }
     public DbSet<Offer> Offers { get; set; }
@@ -18,18 +17,11 @@ public class CoreDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        ConfigureExamples(modelBuilder);
         ConfigureUsers(modelBuilder);
         ConfigureInquiries(modelBuilder);
         ConfigureOffers(modelBuilder);
     }
 
-    private static void ConfigureExamples(ModelBuilder modelBuilder)
-    {
-        modelBuilder.Entity<Example>().HasKey(e => e.Id);
-        modelBuilder.Entity<Example>().Property(e => e.Name).HasMaxLength(StringLengths.ShortString);
-    }
-    
     private static void ConfigureUsers(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>(cfg =>
@@ -65,6 +57,8 @@ public class CoreDbContext : DbContext
                 inner.Property(e => e.GovernmentIdType);
                 inner.Property(e => e.JobType);
             });
+
+            cfg.HasIndex(e => e.UserId);
         });
     }
     
@@ -80,6 +74,8 @@ public class CoreDbContext : DbContext
             cfg.Property(e => e.SourceBank).HasDefaultValue(OfferSourceBank.OurBank);
             cfg.Property(e => e.CreationTime);
             cfg.Property(e => e.BankId).HasMaxLength(StringLengths.ShortString);
+
+            cfg.HasIndex(e => e.InquireId);
         });
     }
 }
