@@ -5,9 +5,10 @@ using Services.Data.Repositories;
 using Services.ValidationExtensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Services.Data.Auth0;
+using Services.Configurations;
 using Services.Services.Apis.OurApis;
 using Services.Services.Apis.OurApis.Clients;
+using Services.Services.Auth0;
 
 namespace Api;
 
@@ -21,10 +22,10 @@ public class Program
             opts => opts.UseNpgsql(builder.Configuration["DatabaseConnectionString"])
         );
 
-        builder.Services.AddHttpClient<Auth0Client>().ConfigureHttpClient(client =>
-        {
-            client.BaseAddress = new Uri(builder.Configuration["Auth0ApiUrl"]);
-        });
+        builder.Services.AddSingleton(new OurApiConfiguration(builder.Configuration["OurApiUrlPrefix"]));
+        builder.Services.AddSingleton(new Auth0Configuration(builder.Configuration["Auth0ApiUrl"]));
+
+        builder.Services.AddHttpClient<Auth0Client>().ConfigureHttpClient(Auth0Client.Configure);
         builder.Services.AddHttpClient<OurApiClient>().ConfigureHttpClient(OurApiClient.Configure);
         
         builder.Services.AddScoped<InquiresRepository>();

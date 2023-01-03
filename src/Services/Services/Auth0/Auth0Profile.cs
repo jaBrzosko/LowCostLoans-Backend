@@ -1,7 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace Services.Data.Auth0;
-
+namespace Services.Services.Auth0;
 
 public class Auth0Profile
 {
