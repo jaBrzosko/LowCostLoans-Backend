@@ -30,7 +30,8 @@ services:
       - ../API/secrets.env
   backend-postgres:
       container_name: backend-database
-      image: "postgres:latest"
+      image: db-backend
+      build: ./database
       environment:
         - POSTGRES_PASSWORD=password
         - POSTGRES_DB=backend

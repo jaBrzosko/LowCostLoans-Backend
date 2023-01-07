@@ -1,4 +1,4 @@
-FROM postgres:12 as db
+FROM postgres:14 as db
 WORKDIR /app
 COPY ./scripts/init.sh /docker-entrypoint-initdb.d
 COPY ./scripts/seed.sql ./scripts/seed.sql
