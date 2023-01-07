@@ -4,6 +4,7 @@ using Services.Data;
 using Contracts.Offers;
 using Domain.Offers;
 using Microsoft.EntityFrameworkCore;
+using Services.Data.Repositories;
 using Services.Services.Apis.OurApis.Clients;
 
 namespace Services.Endpoints.Offers;
@@ -13,21 +14,18 @@ namespace Services.Endpoints.Offers;
 
 public class GetOfferStatusEndpoint : Endpoint<GetOfferStatus, OfferStatusDto?>
 {
-    private readonly CoreDbContext dbContext;
+    private readonly OffersRepository offersRepository;
     private readonly OurApiClient ourApiClient;
 
-    public GetOfferStatusEndpoint(CoreDbContext dbContext, OurApiClient ourApiClient)
+    public GetOfferStatusEndpoint(OffersRepository offersRepository, OurApiClient ourApiClient)
     {
-        this.dbContext = dbContext;
+        this.offersRepository = offersRepository;
         this.ourApiClient = ourApiClient;
     }
 
     public override async Task HandleAsync(GetOfferStatus req, CancellationToken ct)
     {
-        var offer = await dbContext
-            .Offers
-            .Where(o => o.Id == req.Id)
-            .FirstOrDefaultAsync(ct);
+        var offer = await offersRepository.FindAsync(req.Id, ct);
         if (offer is null)
             return;
         OfferStatusDto? retOffer = null;
