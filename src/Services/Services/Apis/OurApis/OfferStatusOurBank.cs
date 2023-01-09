@@ -1,4 +1,6 @@
-namespace Contracts.Offers;
+using Contracts.Offers;
+
+namespace Services.Services.Apis.OurApis;
 
 public class OfferStatusOurBank
 {
