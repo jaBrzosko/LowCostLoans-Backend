@@ -1,15 +1,23 @@
+using System.Net;
 using System.Net.Http.Headers;
 using System.Text.Json;
-using System.Net;
+using Microsoft.Extensions.DependencyInjection;
+using Services.Configurations;
 
-namespace Services.Data.Auth0;
+namespace Services.Services.Auth0;
 
 public class Auth0Client
 {
-    private HttpClient client;
+    private readonly HttpClient client;
 
     public Auth0Client(HttpClient client) =>
         this.client = client;
+    
+    public static void Configure(IServiceProvider serviceProvider, HttpClient client)
+    {
+        var configuration = serviceProvider.GetService<Auth0Configuration>()!;
+        client.BaseAddress = new Uri(configuration.ApiUrl);
+    }
     
     public virtual async Task<Auth0Profile?> GetProfile(string token)
     {

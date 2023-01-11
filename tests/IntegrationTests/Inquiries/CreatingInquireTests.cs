@@ -36,7 +36,6 @@ public class CreatingInquireTests : TestBase
         postResult.response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
     
-    [Fact]
     public async Task Mocked_Offers_are_added()
     {
         var createInquire = new PostCreateInquireAsAnonymous

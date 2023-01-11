@@ -1,4 +1,4 @@
-using Services.Data.Auth0;
+using Services.Services.Auth0;
 
 namespace IntegrationTests.MockedServices;
 

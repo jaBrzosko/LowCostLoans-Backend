@@ -2,6 +2,8 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Contracts.Offers;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Services.Configurations;
 
 namespace Services.Services.Apis.OurApis.Clients;
 
@@ -14,9 +16,10 @@ public class OurApiClient
         this.client = client;
     }
 
-    public static void Configure(HttpClient client)
+    public static void Configure(IServiceProvider serviceProvider, HttpClient client)
     {
-        client.BaseAddress = new Uri("http://api:80"); // TODO: load it from configuration
+        var configuration = serviceProvider.GetService<OurApiConfiguration>()!;
+        client.BaseAddress = new Uri(configuration.UrlPrefix);
     }
 
     public virtual async Task<List<ApiOfferData>> GetOffersAsync(Guid inquireId, CancellationToken ct)

@@ -11,9 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Services.Data;
-using Services.Data.Auth0;
-
 using Services.Services.Apis.OurApis.Clients;
+using Services.Services.Auth0;
 using Xunit;
 
 namespace IntegrationTests;
