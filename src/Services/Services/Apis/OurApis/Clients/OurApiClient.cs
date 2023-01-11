@@ -9,6 +9,8 @@ namespace Services.Services.Apis.OurApis.Clients;
 
 public class OurApiClient
 {
+    private const string ApiKeyHeaderName = "ApiKey";
+    
     private readonly HttpClient client;
 
     public OurApiClient(HttpClient client)
@@ -20,6 +22,7 @@ public class OurApiClient
     {
         var configuration = serviceProvider.GetService<OurApiConfiguration>()!;
         client.BaseAddress = new Uri(configuration.UrlPrefix);
+        client.DefaultRequestHeaders.Add(ApiKeyHeaderName, configuration.ApiKey);
     }
 
     public virtual async Task<List<ApiOfferData>> GetOffersAsync(Guid inquireId, CancellationToken ct)

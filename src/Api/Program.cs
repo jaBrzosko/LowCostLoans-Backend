@@ -22,7 +22,7 @@ public class Program
             opts => opts.UseNpgsql(builder.Configuration["DatabaseConnectionString"])
         );
 
-        builder.Services.AddSingleton(new OurApiConfiguration(builder.Configuration["OurApiUrlPrefix"]));
+        builder.Services.AddSingleton(new OurApiConfiguration(builder.Configuration["OurApiUrlPrefix"], builder.Configuration["OurApiApiKey"]));
         builder.Services.AddSingleton(new Auth0Configuration(builder.Configuration["Auth0ApiUrl"]));
 
         builder.Services.AddHttpClient<Auth0Client>().ConfigureHttpClient(Auth0Client.Configure);
