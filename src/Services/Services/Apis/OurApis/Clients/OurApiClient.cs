@@ -10,7 +10,7 @@ namespace Services.Services.Apis.OurApis.Clients;
 public class OurApiClient
 {
     private const string ApiKeyHeaderName = "ApiKey";
-    
+
     private readonly HttpClient client;
 
     public OurApiClient(HttpClient client)
@@ -59,7 +59,7 @@ public class OurApiClient
             },
         };
         var content = JsonContent.Create(postInquire);
-        var response = await client.PostAsync("inquiries/createInquireAsAnonymous", content, ct);
+        var response = await client.PostAsync("inquiries/createAnonymousInquire", content, ct);
         var inquire = await response.Content.ReadFromJsonAsync<InquireResponse>(cancellationToken: ct);
         return inquire!.Id;
     }
