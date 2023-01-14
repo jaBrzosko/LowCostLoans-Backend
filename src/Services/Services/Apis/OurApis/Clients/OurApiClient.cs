@@ -85,4 +85,11 @@ public class OurApiClient
 
         await client.PostAsync("offers/accept", content, ct);
     }
+
+    public virtual async Task<OfferStatusTypeDto> GetOfferStatus(string offerId, CancellationToken ct)
+    {
+        var response = await client.GetAsync($"/offers/getOfferStatus?Id={offerId}", ct);
+        var status = await response.Content.ReadFromJsonAsync<OfferStatusOurBank>(cancellationToken: ct);
+        return status!.Status;
+    }
 }
