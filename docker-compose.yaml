@@ -14,6 +14,7 @@ services:
       - backend-db
     env_file:
       - variables.env
+      - secrets.env
   api:
     container_name: api
     image: api-backend-dotnet
@@ -29,27 +30,27 @@ services:
       - ../API/variables.env
       - ../API/secrets.env
   backend-postgres:
-      container_name: backend-database
-      image: "postgres:latest"
-      environment:
-        - POSTGRES_PASSWORD=password
-        - POSTGRES_DB=backend
-        - POSTGRES_USER=admin
-      networks:
-        - backend-db
-      volumes:
-        - /var/loans/postgres:/var/lib/postgresql/data
+    container_name: backend-database
+    image: "postgres:latest"
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=backend
+      - POSTGRES_USER=admin
+    networks:
+      - backend-db
+    volumes:
+      - /var/loans/postgres:/var/lib/postgresql/data
   api-postgres:
-      container_name: api-database
-      image: "postgres:latest"
-      environment:
-        - POSTGRES_PASSWORD=password
-        - POSTGRES_DB=api
-        - POSTGRES_USER=admin
-      networks:
-        - api-db
-      volumes:
-        - /var/loans/postgres-api:/var/lib/postgresql/data
+    container_name: api-database
+    image: "postgres:latest"
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=api
+      - POSTGRES_USER=admin
+    networks:
+      - api-db
+    volumes:
+      - /var/loans/postgres-api:/var/lib/postgresql/data
 networks:
   api-network:
     name: api-network
