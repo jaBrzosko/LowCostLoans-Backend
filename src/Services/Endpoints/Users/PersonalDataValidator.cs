@@ -32,6 +32,10 @@ public class PersonalDataValidator : AbstractValidator<PersonalDataDto>
             .Must(IsGovernmentIdValid)
             .WithErrorCode(PersonalDataDto.ErrorCodes.GovernmentIdIsInvalid)
             .WithMessage("GovernmentId is invalid");
+
+        RuleFor(pd => pd.Email)
+            .EmailAddress()
+            .WithErrorCode(PersonalDataDto.ErrorCodes.EmailIsInvalid);
     }
 
     private bool IsGovernmentIdValid(PersonalDataDto personalData)

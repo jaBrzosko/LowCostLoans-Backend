@@ -33,6 +33,7 @@ public class CoreDbContext : DbContext
                 inner.Property(e => e.FirstName).HasMaxLength(StringLengths.ShortString);
                 inner.Property(e => e.LastName).HasMaxLength(StringLengths.ShortString);
                 inner.Property(e => e.GovernmentId).HasMaxLength(StringLengths.MediumString);
+                inner.Property(e => e.Email).HasMaxLength(StringLengths.MediumString).HasDefaultValue("zstap.mario.z.rio@aleeas.com");
                 inner.Property(e => e.GovernmentIdType);
                 inner.Property(e => e.JobType);
             });
@@ -54,6 +55,7 @@ public class CoreDbContext : DbContext
                 inner.Property(e => e.FirstName).HasMaxLength(StringLengths.ShortString);
                 inner.Property(e => e.LastName).HasMaxLength(StringLengths.ShortString);
                 inner.Property(e => e.GovernmentId).HasMaxLength(StringLengths.MediumString);
+                inner.Property(e => e.Email).HasMaxLength(StringLengths.MediumString).HasDefaultValue("zstap.mario.z.rio@aleeas.com");
                 inner.Property(e => e.GovernmentIdType);
                 inner.Property(e => e.JobType);
             });
