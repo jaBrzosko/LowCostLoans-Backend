@@ -26,7 +26,8 @@ public class LoanBankOffersGetter: IApiOffersGetter
             var pendingInquire = new PendingInquire
             {
                 BankInquireId = postedInquireId,
-                SourceBank = OfferSourceBank.LoanBank
+                SourceBank = OfferSourceBank.LoanBank,
+                InquireId = dbInquireData.Id
             };
 
             await coreDbContext.PendingInquires.AddAsync(pendingInquire, ct);

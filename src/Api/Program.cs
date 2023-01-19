@@ -21,9 +21,8 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
         
         builder.Services.AddDbContext<CoreDbContext>(
-            // opts => opts.UseNpgsql(builder.Configuration["DatabaseConnectionString"])
-        opts => opts.UseNpgsql("Host=backend-database;Username=admin;Password=password;Database=backend")
-            );
+            opts => opts.UseNpgsql(builder.Configuration["DatabaseConnectionString"])
+        );
 
         builder.Services.AddSingleton(new OurApiConfiguration(builder.Configuration["OurApiUrlPrefix"], builder.Configuration["OurApiApiKey"]));
         builder.Services.AddSingleton(new Auth0Configuration(builder.Configuration["Auth0ApiUrl"]));
