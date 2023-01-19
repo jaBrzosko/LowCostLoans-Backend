@@ -51,6 +51,8 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
         {
             inquire.UpdateStatus(InquireStatus.OffersGenerationFailed);
             inquiriesRepository.Update(inquire);
+            File.WriteAllText("dupa2", exception.ToString());
+
         }
 
         await dbContext.SaveChangesAsync(ct);

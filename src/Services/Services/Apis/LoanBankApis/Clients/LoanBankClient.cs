@@ -24,6 +24,7 @@ public class LoanBankClient
 
     public virtual async Task<List<ApiOfferData>> GetOffersAsync(Guid inquireId, CancellationToken ct)
     {
+        
         return new List<ApiOfferData>();
     }
 
