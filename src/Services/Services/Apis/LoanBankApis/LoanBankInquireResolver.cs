@@ -20,7 +20,7 @@ public class LoanBankInquireResolver
     public async Task ResolvePendingInquiries(CancellationToken ct)
     {
         var pendingInquires = await coreDbContext
-            .PendingInquires
+            .PendingInquiries
             .Where(x => x.SourceBank == OfferSourceBank.LoanBank)
             .ToListAsync(ct);
         bool areChanges = false;

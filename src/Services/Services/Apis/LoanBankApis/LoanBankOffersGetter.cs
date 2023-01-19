@@ -30,7 +30,7 @@ public class LoanBankOffersGetter: IApiOffersGetter
                 InquireId = dbInquireData.Id
             };
 
-            await coreDbContext.PendingInquires.AddAsync(pendingInquire, ct);
+            await coreDbContext.PendingInquiries.AddAsync(pendingInquire, ct);
             await coreDbContext.SaveChangesAsync(ct);
         }
         

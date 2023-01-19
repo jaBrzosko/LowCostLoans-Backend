@@ -11,7 +11,7 @@ public class CoreDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Inquire> Inquiries { get; set; }
     public DbSet<Offer> Offers { get; set; }
-    public DbSet<PendingInquire> PendingInquires { get; set; }
+    public DbSet<PendingInquire> PendingInquiries { get; set; }
 
     public CoreDbContext(DbContextOptions<CoreDbContext> options) : base(options)
     { }
