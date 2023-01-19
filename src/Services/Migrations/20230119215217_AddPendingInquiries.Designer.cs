@@ -12,8 +12,8 @@ using Services.Data;
 namespace Services.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    [Migration("20230119213743_ChangePendingInquiriesName")]
-    partial class ChangePendingInquiriesName
+    [Migration("20230119215217_AddPendingInquiries")]
+    partial class AddPendingInquiries
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

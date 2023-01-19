@@ -33,6 +33,7 @@ public class LoanBankInquireResolver
             }
             var offer = new Offer(inq.InquireId, apiOffer.InterestRateInPromiles, apiOffer.MoneyInSmallestUnit, apiOffer.NumberOfInstallments, OfferSourceBank.LoanBank, apiOffer.BankId);
             coreDbContext.Offers.Add(offer);
+            coreDbContext.PendingInquiries.Remove(inq);
             areChanges = true;
         }
 

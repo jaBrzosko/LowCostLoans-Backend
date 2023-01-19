@@ -11,7 +11,7 @@ public class OfferResponse
     [JsonPropertyName("monthlyInstallment")]
     public float MonthlyInstallment { get; set; }
     [JsonPropertyName("requestedValue")]
-    public int RequestedValue { get; set; }
+    public double RequestedValue { get; set; }
     [JsonPropertyName("requestedPeriodInMonth")]
     public int NumberOfInstallments { get; set; }
     [JsonPropertyName("statusId")]

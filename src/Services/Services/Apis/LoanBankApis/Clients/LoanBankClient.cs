@@ -42,7 +42,7 @@ public class LoanBankClient
         var offer = new ApiOfferData
         {
             InterestRateInPromiles = (int)(offerDetails.Percentage * 100),
-            MoneyInSmallestUnit = offerDetails.RequestedValue,
+            MoneyInSmallestUnit = (int)offerDetails.RequestedValue,
             NumberOfInstallments = offerDetails.NumberOfInstallments,
             BankId = offerDetails.OfferId.ToString()
         };
