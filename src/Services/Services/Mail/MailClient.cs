@@ -23,12 +23,6 @@ public class MailClient
         useSsl = bool.Parse(cfg.UseSsl);
     }
 
-    /// <param name="Recipient">Recipient.</param>
-    /// <param name="RecipientMail">Recipient e-mail address.</param>
-    /// <param name="Subject">Content of the message.</param>
-    /// <param name="Body">Content of the message.</param>
-    /// <param name="BodyType">Type of message - "plain" or "html".</param>
-    /// <param name="ct">Cancellation token.</param>
     public virtual async Task SendMail(string Recipient, string RecipientMail, string Subject, string Body, string BodyType, CancellationToken ct)
     {
         var message = new MimeMessage();

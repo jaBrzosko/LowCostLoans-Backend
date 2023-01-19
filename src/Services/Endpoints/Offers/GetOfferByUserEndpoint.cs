@@ -67,7 +67,7 @@ public class GetOfferByUserEndpoint : Endpoint<GetOfferByUser, PaginationResultD
             Results = offers,
             Offset = start,
             TotalCount = count
-        };
+        }; // TODO: use extension method like in API
         await SendAsync(result, cancellation: ct);
     }
 }

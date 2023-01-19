@@ -31,7 +31,7 @@ public class GetSendMail : EndpointWithoutRequest
         }
         catch (Exception)
         {
-            await SendNotFoundAsync(ct); // couldn't find 500.
+            await SendNotFoundAsync(ct);
         }
     }
 }
