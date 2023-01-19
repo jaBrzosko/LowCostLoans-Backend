@@ -20,7 +20,7 @@ public class LoanBankAuthClient
     {
         var configuration = serviceProvider.GetService<LoanBankConfiguration>()!;
         client.BaseAddress = new Uri(configuration.AuthUrlPrefix);
-        client.DefaultRequestHeaders.Add("authorization", 
+        client.DefaultRequestHeaders.Add("authorization", "Basic " + 
             Base64Encode(configuration.ApiKeyName + ":" + configuration.ApiKeySecret));
     }
 

@@ -23,17 +23,27 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
 
     public async Task HandleAsync(InquireCreatedEvent eventModel, CancellationToken ct)
     {
+        File.WriteAllText("dupan0", "Dupan0");
         using var scope = scopeFactory.CreateScope();
+        File.WriteAllText("dupan1", "Dupan1");
         ConstructApiOffersGetters(scope);
+        File.WriteAllText("dupan2", "Dupan2");
         var inquiriesRepository = scope.ServiceProvider.GetService<InquiresRepository>()!;
+        File.WriteAllText("dupan3", "Dupan3");
         var offersRepository = scope.ServiceProvider.GetService<OffersRepository>()!;
+        File.WriteAllText("dupan4", "Dupan4");
         var usersRepository = scope.ServiceProvider.GetService<UsersRepository>()!;
+        File.WriteAllText("dupan5", "Dupan5");
         var dbContext = scope.ServiceProvider.GetRequiredService<CoreDbContext>();
+        File.WriteAllText("dupan6", "Dupan6");
         
         var inquire = await inquiriesRepository.FindAndEnsureExistence(eventModel.InquireId, ct);
+        File.WriteAllText("dupan7", "Dupan7");
 
         try
         {
+            File.WriteAllText("dupa0", "Dupa0");
+
             foreach (var offersGetter in apiOffersGetters)
             {
                 var apiOffers = await offersGetter.GetOffersAsync(await GetDbInquireDataAsync(inquire, usersRepository, ct), ct);
@@ -47,10 +57,12 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
             inquire.UpdateStatus(InquireStatus.OffersGenerated);
             inquiriesRepository.Update(inquire);
         }
-        catch (Exception)
+        catch (Exception exception)
         {
             inquire.UpdateStatus(InquireStatus.OffersGenerationFailed);
             inquiriesRepository.Update(inquire);
+            File.WriteAllText("dupaYYY", exception.ToString());
+
         }
 
         await dbContext.SaveChangesAsync(ct);
@@ -58,11 +70,19 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
 
     private void ConstructApiOffersGetters(IServiceScope scope)
     {
-        apiOffersGetters = new()
+        try
         {
-            scope.ServiceProvider.GetService<OurApiOffersGetter>()!,
-            scope.ServiceProvider.GetService<LoanBankOffersGetter>()!
-        };
+            apiOffersGetters = new()
+            {
+                scope.ServiceProvider.GetService<OurApiOffersGetter>()!,
+                scope.ServiceProvider.GetService<LoanBankOffersGetter>()!
+            };
+        }
+        catch (Exception exception)
+        {
+            File.WriteAllText("dupaXX", exception.ToString());
+        }
+        
     }
 
     private async Task<DbInquireData> GetDbInquireDataAsync(Inquire inquire, UsersRepository usersRepository, CancellationToken ct)

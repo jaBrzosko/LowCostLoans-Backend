@@ -10,17 +10,15 @@ namespace Services.Services.Apis.LoanBankApis.Clients;
 public class LoanBankClient
 {
     private readonly HttpClient client;
-    private readonly LoanBankAuthClient authClient;
 
-    public LoanBankClient(HttpClient client, LoanBankAuthClient authClient)
+    public LoanBankClient(HttpClient client)
     {
         this.client = client;
-        this.authClient = authClient;
     }
     
     public static void Configure(IServiceProvider serviceProvider, HttpClient client)
     {
-        var configuration = serviceProvider.GetService<OurApiConfiguration>()!;
+        var configuration = serviceProvider.GetService<LoanBankConfiguration>()!;
         client.BaseAddress = new Uri(configuration.UrlPrefix);
     }
 
@@ -29,7 +27,7 @@ public class LoanBankClient
         return new List<ApiOfferData>();
     }
 
-    public virtual async Task<String?> PostInquireAsync(DbInquireData inquireData, CancellationToken ct)
+    public virtual async Task<String?> PostInquireAsync(DbInquireData inquireData, LoanBankAuthClient authClient, CancellationToken ct)
     {
         var postInquire = new InquireRequest
         {
