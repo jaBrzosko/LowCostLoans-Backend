@@ -22,10 +22,33 @@ public class LoanBankClient
         client.BaseAddress = new Uri(configuration.UrlPrefix);
     }
 
-    public virtual async Task<List<ApiOfferData>> GetOffersAsync(Guid inquireId, CancellationToken ct)
+    public virtual async Task<List<ApiOfferData>> GetOffersAsync(Guid inquireId, LoanBankAuthClient authClient, CancellationToken ct)
     {
-        
-        return new List<ApiOfferData>();
+        var token = await authClient.GetTokenAsync(ct);
+        client.DefaultRequestHeaders.Remove("Authorization");
+        client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+        var response = await client.GetAsync($"Inquire/{inquireId}", ct);
+        var inquireDetails = await response.Content.ReadFromJsonAsync<InquireDetailedResponse>(cancellationToken: ct);
+        if (inquireDetails is null || inquireDetails.OfferId is null)
+        {
+            return new();
+        }
+        var offerResponse = await client.GetAsync($"Offer/{inquireDetails.OfferId}", ct);
+        var offerDetails = await offerResponse.Content.ReadFromJsonAsync<OfferResponse>(cancellationToken: ct);
+        if (offerDetails is null)
+        {
+            return new();
+        }
+        var offer = new ApiOfferData
+        {
+            InterestRateInPromiles = (int)(offerDetails.Percentage * 100),
+            MoneyInSmallestUnit = offerDetails.RequestedValue,
+            NumberOfInstallments = offerDetails.NumberOfInstallments,
+            BankId = offerDetails.OfferId.ToString()
+        };
+        var ret = new List<ApiOfferData>();
+        ret.Add(offer);
+        return ret;
     }
 
     public virtual async Task<String?> PostInquireAsync(DbInquireData inquireData, LoanBankAuthClient authClient, CancellationToken ct)
