@@ -1,6 +1,6 @@
 namespace Domain.Users;
 
-public record PersonalData(string FirstName, string LastName, string GovernmentId, GovernmentIdType GovernmentIdType, JobType JobType);
+public record PersonalData(string FirstName, string LastName, string GovernmentId, string Email, GovernmentIdType GovernmentIdType, JobType JobType);
 
 public enum GovernmentIdType
 {

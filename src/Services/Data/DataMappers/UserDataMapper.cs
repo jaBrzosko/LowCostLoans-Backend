@@ -21,6 +21,7 @@ public static class UserDataMapper
             personalDataDto.FirstName,
             personalDataDto.LastName,
             personalDataDto.GovernmentId,
+            personalDataDto.Email,
             (GovernmentIdType)personalDataDto.GovernmentIdType,
             (JobType)personalDataDto.JobType
         );
@@ -33,6 +34,7 @@ public static class UserDataMapper
             FirstName = personalData.FirstName,
             LastName = personalData.LastName,
             GovernmentId = personalData.GovernmentId,
+            Email = personalData.Email,
             GovernmentIdType = (GovernmentIdTypeDto)personalData.GovernmentIdType,
             JobType = (JobTypeDto)personalData.JobType,
         };
