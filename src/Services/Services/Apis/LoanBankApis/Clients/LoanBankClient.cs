@@ -85,13 +85,28 @@ public class LoanBankClient
         return inquire!.Id.ToString();
     }
 
-    public virtual async Task<Uri> GetOfferContract(CancellationToken ct)
+    public virtual async Task<Uri> GetOfferContract(string bankOfferId, LoanBankAuthClient authClient, CancellationToken ct)
     {
-        return new Uri("google.com");
+        var token = await authClient.GetTokenAsync(ct);
+        client.DefaultRequestHeaders.Remove("Authorization");
+        client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+        var offerResponse = await client.GetAsync($"Offer/{bankOfferId}", ct);
+        var offerDetails = await offerResponse.Content.ReadFromJsonAsync<OfferResponse>(cancellationToken: ct);
+        if (offerDetails is null || offerDetails.DocumentLink is null)
+        {
+            return new Uri(string.Empty);
+        }
+
+        var link = offerDetails.DocumentLink.Split("v1/")[1];
+        
+        var linkResponse = await client.GetAsync(link, ct);
+
+        return new Uri(offerDetails.DocumentLink);
     }
 
     public virtual async Task PostAcceptOffer(string offerId, IFormFile file, CancellationToken ct)
     {
+        
     }
 
     public virtual async Task<OfferStatusTypeDto> GetOfferStatus(string offerId, CancellationToken ct)

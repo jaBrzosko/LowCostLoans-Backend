@@ -27,9 +27,9 @@ public class OfferResponse
     [JsonPropertyName("approvedBy")]
     public string? ApprovedBy { get; set; }
     [JsonPropertyName("documentLink")]
-    public string DocumentLink { get; set; }
+    public string? DocumentLink { get; set; }
     [JsonPropertyName("documentLinkValidDate")]
-    public DateTime DocumentLinkValidDate { get; set; }
+    public DateTime? DocumentLinkValidDate { get; set; }
     
     
 }
