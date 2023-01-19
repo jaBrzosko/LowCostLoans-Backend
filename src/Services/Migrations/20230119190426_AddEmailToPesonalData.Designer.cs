@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Services.Data;
@@ -11,9 +12,10 @@ using Services.Data;
 namespace Services.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    partial class CoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230119190426_AddEmailToPesonalData")]
+    partial class AddEmailToPesonalData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,24 +50,6 @@ namespace Services.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Inquiries");
-                });
-
-            modelBuilder.Entity("Domain.Inquires.PendingInquire", b =>
-                {
-                    b.Property<string>("BankInquireId")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("InquireId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("SourceBank")
-                        .HasColumnType("integer");
-
-                    b.HasKey("BankInquireId");
-
-                    b.HasIndex("BankInquireId");
-
-                    b.ToTable("PendingInquiries");
                 });
 
             modelBuilder.Entity("Domain.Offers.Offer", b =>

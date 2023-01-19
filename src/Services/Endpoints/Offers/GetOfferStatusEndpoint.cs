@@ -29,20 +29,27 @@ public class GetOfferStatusEndpoint : Endpoint<GetOfferStatus, OfferStatusDto?>
         if (offer is null)
             return;
         OfferStatusDto? retOffer = null;
-        switch (offer.SourceBank)
+        try
         {
-            case(OfferSourceBank.OurBank):
+            switch (offer.SourceBank)
             {
-                var response = await ourApiClient.GetOfferStatus(offer.BankId, ct);
-                retOffer = new OfferStatusDto
-                {
-                    Id = req.Id,
-                    Status = response
-                };
-                break;
+                case (OfferSourceBank.OurBank):
+                    {
+                        var response = await ourApiClient.GetOfferStatus(offer.BankId, ct);
+                        retOffer = new OfferStatusDto
+                        {
+                            Id = req.Id,
+                            Status = response
+                        };
+                        break;
+                    }
             }
-        }
 
-        await SendAsync(retOffer, cancellation: ct);
+            await SendAsync(retOffer, cancellation: ct);
+        }
+        catch (Exception e)
+        {
+            await SendNotFoundAsync(ct);
+        }
     }
 }

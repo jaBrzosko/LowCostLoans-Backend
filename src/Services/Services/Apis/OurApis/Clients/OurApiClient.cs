@@ -59,7 +59,7 @@ public class OurApiClient
             },
         };
         var content = JsonContent.Create(postInquire);
-        var response = await client.PostAsync("inquiries/createAnonymousInquire", content, ct);
+        var response = await client.PostAsync("api/inquiries/createAnonymousInquire", content, ct);
         var inquire = await response.Content.ReadFromJsonAsync<InquireResponse>(cancellationToken: ct);
         return inquire!.Id;
     }
@@ -92,6 +92,8 @@ public class OurApiClient
     public virtual async Task<OfferStatusTypeDto> GetOfferStatus(string offerId, CancellationToken ct)
     {
         var response = await client.GetAsync($"/offers/getOfferStatus?Id={offerId}", ct);
+        if (!((int)response.StatusCode < 300 && (int)response.StatusCode >= 200))
+            throw new Exception("Failed: " + response.StatusCode);
         var status = await response.Content.ReadFromJsonAsync<OfferStatusOurBank>(cancellationToken: ct);
         return status!.Status;
     }
