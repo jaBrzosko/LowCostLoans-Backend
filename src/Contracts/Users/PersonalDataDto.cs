@@ -7,6 +7,7 @@ public class PersonalDataDto
     public string GovernmentId { get; set; }
     public GovernmentIdTypeDto GovernmentIdType { get; set; }
     public JobTypeDto JobType { get; set; }
+    public string Email { get; set; }
 
     public class ErrorCodes
     {
@@ -17,5 +18,6 @@ public class PersonalDataDto
         public const int GovernmentIdIsEmpty = 1_005;
         public const int GovernmentIdIsTooLong = 1_006;
         public const int GovernmentIdIsInvalid = 1_007;
+        public const int EmailIsInvalid = 1_008;
     }
 }
