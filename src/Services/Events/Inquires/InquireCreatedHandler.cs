@@ -6,6 +6,7 @@ using Services.Data;
 using Services.Data.Repositories;
 using Services.Services.Apis;
 using Services.Services.Apis.OurApis;
+using Services.Services.Mail;
 
 namespace Services.Events.Inquires;
 
@@ -27,8 +28,10 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
         var offersRepository = scope.ServiceProvider.GetService<OffersRepository>()!;
         var usersRepository = scope.ServiceProvider.GetService<UsersRepository>()!;
         var dbContext = scope.ServiceProvider.GetRequiredService<CoreDbContext>();
+        var mailClient = scope.ServiceProvider.GetService<MailClient>()!;
         
         var inquire = await inquiriesRepository.FindAndEnsureExistence(eventModel.InquireId, ct);
+        var createdOffers = new List<Guid>();
 
         try
         {
@@ -39,6 +42,8 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
                 {
                     var offer = new Offer(inquire.Id, o.InterestRateInPromiles, o.MoneyInSmallestUnit, o.NumberOfInstallments, OfferSourceBank.OurBank, o.BankId);
                     offersRepository.Add(offer);
+                    
+                    createdOffers.Add(offer.Id);
                 }
             }
 
@@ -52,6 +57,18 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
         }
 
         await dbContext.SaveChangesAsync(ct);
+    }
+
+    private async Task SendEmailsAsync(Inquire inquire, List<Guid> offers, UsersRepository usersRepository, MailClient mailClient, CancellationToken cancellationToken)
+    {
+        var personalData = await GetPersonalDataAsync(inquire, usersRepository, cancellationToken);
+        var tasks = new List<Task>();
+        foreach (var offerId in offers)
+        {
+            tasks.Add(mailClient.SendMail($"{personalData.FirstName} {personalData.LastName}", personalData.Email, "Offer created", offerId.ToString(), "plain", cancellationToken));
+        }
+
+        Task.WaitAll(tasks.ToArray(), cancellationToken);
     }
 
     private void ConstructApiOffersGetters(IServiceScope scope)

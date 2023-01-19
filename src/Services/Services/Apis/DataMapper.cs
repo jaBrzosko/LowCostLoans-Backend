@@ -8,6 +8,7 @@ public static class DataMapper
             domainPersonalData.FirstName,
             domainPersonalData.LastName,
             domainPersonalData.GovernmentId,
+            domainPersonalData.Email,
             (DbGovernmentIdType)domainPersonalData.GovernmentIdType,
             (DbJobType)domainPersonalData.JobType);
     }
