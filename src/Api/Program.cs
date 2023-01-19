@@ -21,8 +21,9 @@ public class Program
         var builder = WebApplication.CreateBuilder(args);
         
         builder.Services.AddDbContext<CoreDbContext>(
-            opts => opts.UseNpgsql(builder.Configuration["DatabaseConnectionString"])
-        );
+            // opts => opts.UseNpgsql(builder.Configuration["DatabaseConnectionString"])
+        opts => opts.UseNpgsql("Host=backend-database;Username=admin;Password=password;Database=backend")
+            );
 
         builder.Services.AddSingleton(new OurApiConfiguration(builder.Configuration["OurApiUrlPrefix"], builder.Configuration["OurApiApiKey"]));
         builder.Services.AddSingleton(new Auth0Configuration(builder.Configuration["Auth0ApiUrl"]));
@@ -41,6 +42,8 @@ public class Program
         
         builder.Services.AddScoped<OurApiOffersGetter>();
         builder.Services.AddScoped<LoanBankOffersGetter>();
+
+        builder.Services.AddScoped<LoanBankInquireResolver>();
         
         builder.Services.AddFastEndpoints();
         builder.Services.AddSwaggerDoc();

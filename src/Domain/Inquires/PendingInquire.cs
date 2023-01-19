@@ -4,7 +4,7 @@ namespace Domain.Inquires;
 
 public class PendingInquire
 {
-    public string InquireId { get; set; }
-
+    public string BankInquireId { get; set; }
+    public Guid InquireId { get; set; }
     public OfferSourceBank SourceBank { get; set; }
 }

@@ -25,7 +25,7 @@ public class LoanBankOffersGetter: IApiOffersGetter
         {
             var pendingInquire = new PendingInquire
             {
-                InquireId = postedInquireId,
+                BankInquireId = postedInquireId,
                 SourceBank = OfferSourceBank.LoanBank
             };
 

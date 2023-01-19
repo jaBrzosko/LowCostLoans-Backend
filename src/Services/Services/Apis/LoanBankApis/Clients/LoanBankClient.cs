@@ -22,7 +22,7 @@ public class LoanBankClient
         client.BaseAddress = new Uri(configuration.UrlPrefix);
     }
 
-    public virtual async Task<List<ApiOfferData>> GetOffersAsync(Guid inquireId, LoanBankAuthClient authClient, CancellationToken ct)
+    public virtual async Task<ApiOfferData?> GetOfferAsync(string inquireId, LoanBankAuthClient authClient, CancellationToken ct)
     {
         var token = await authClient.GetTokenAsync(ct);
         client.DefaultRequestHeaders.Remove("Authorization");
@@ -31,13 +31,13 @@ public class LoanBankClient
         var inquireDetails = await response.Content.ReadFromJsonAsync<InquireDetailedResponse>(cancellationToken: ct);
         if (inquireDetails is null || inquireDetails.OfferId is null)
         {
-            return new();
+            return null;
         }
         var offerResponse = await client.GetAsync($"Offer/{inquireDetails.OfferId}", ct);
         var offerDetails = await offerResponse.Content.ReadFromJsonAsync<OfferResponse>(cancellationToken: ct);
         if (offerDetails is null)
         {
-            return new();
+            return null;
         }
         var offer = new ApiOfferData
         {
@@ -46,9 +46,7 @@ public class LoanBankClient
             NumberOfInstallments = offerDetails.NumberOfInstallments,
             BankId = offerDetails.OfferId.ToString()
         };
-        var ret = new List<ApiOfferData>();
-        ret.Add(offer);
-        return ret;
+        return offer;
     }
 
     public virtual async Task<String?> PostInquireAsync(DbInquireData inquireData, LoanBankAuthClient authClient, CancellationToken ct)

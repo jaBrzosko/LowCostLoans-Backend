@@ -85,11 +85,12 @@ public class CoreDbContext : DbContext
     {
         modelBuilder.Entity<PendingInquire>(cfg =>
         {
-            cfg.HasKey(e => e.InquireId);
+            cfg.HasKey(e => e.BankInquireId);
+            cfg.Property(e => e.BankInquireId);
             cfg.Property(e => e.InquireId);
             cfg.Property(e => e.SourceBank);
 
-            cfg.HasIndex(e => e.InquireId);
+            cfg.HasIndex(e => e.BankInquireId);
         });
     }
 }
