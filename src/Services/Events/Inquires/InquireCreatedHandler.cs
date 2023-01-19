@@ -63,6 +63,7 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
     {
         var personalData = await GetPersonalDataAsync(inquire, usersRepository, cancellationToken);
         var tasks = new List<Task>();
+        tasks.Add(mailClient.SendMail($"{personalData.FirstName} {personalData.LastName}", personalData.Email, "Inquire created", inquire.Id.ToString(), "plain", cancellationToken));
         foreach (var offerId in offers)
         {
             tasks.Add(mailClient.SendMail($"{personalData.FirstName} {personalData.LastName}", personalData.Email, "Offer created", offerId.ToString(), "plain", cancellationToken));
