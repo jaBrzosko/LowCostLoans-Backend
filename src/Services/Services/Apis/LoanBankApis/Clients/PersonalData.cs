@@ -4,11 +4,11 @@ namespace Services.Services.Apis.LoanBankApis.Clients;
 
 public class PersonalData
 {
-    //[JsonPropertyName("firstName")]
+    [JsonPropertyName("firstName")]
     public string? FirstName { get; set; }
-    //[JsonPropertyName("lastName")]
+    [JsonPropertyName("lastName")]
     public string? LastName { get; set; }
-    //[JsonPropertyName("birthDate")]
+    [JsonPropertyName("birthDate")]
     public DateTime? BirthDate { get; set; }
 
     public static DateTime ParsePesel(string pesel)

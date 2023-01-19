@@ -4,18 +4,18 @@ namespace Services.Services.Apis.LoanBankApis.Clients;
 
 public class InquireRequest
 {
-    //[JsonPropertyName("value")]
+    [JsonPropertyName("value")]
     public int Value { get; set; }
     
-    //[JsonPropertyName("sub")]
+    [JsonPropertyName("installmentsNumber")]
     public int NumberOfInstallments { get; set; }
     
-    //[JsonPropertyName("personalData")]
+    [JsonPropertyName("personalData")]
     public PersonalData  PersonalData { get; set; }
 
-    //[JsonPropertyName("governmentDocument")]
+    [JsonPropertyName("governmentDocument")]
     public GovernmentDocument GovernmentDocument { get; set; }
     
-    //[JsonPropertyName("governmentId")]
+    [JsonPropertyName("jobDetails")]
     public  JobDetails JobDetails { get; set; }
 }

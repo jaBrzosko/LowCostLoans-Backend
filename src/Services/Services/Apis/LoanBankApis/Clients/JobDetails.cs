@@ -4,14 +4,14 @@ namespace Services.Services.Apis.LoanBankApis.Clients;
 
 public class JobDetails
 {
-    //[JsonPropertyName("typeId")]
+    [JsonPropertyName("typeId")]
     public int? TypeId { get; set; }
-    //[JsonPropertyName("name")]
+    [JsonPropertyName("name")]
     public string? Name { get; set; }
-    //[JsonPropertyName("description")]
+    [JsonPropertyName("description")]
     public string? Description { get; set; }
-    //[JsonPropertyName("jobStartDate")]
+    [JsonPropertyName("jobStartDate")]
     public DateTime? JobStartDate { get; set; }
-    //[JsonPropertyName("jobEndDate")]
+    [JsonPropertyName("jobEndDate")]
     public DateTime? JobEndDate { get; set; }
 }

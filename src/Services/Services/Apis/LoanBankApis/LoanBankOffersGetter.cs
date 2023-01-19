@@ -15,10 +15,7 @@ public class LoanBankOffersGetter: IApiOffersGetter
     }
     public async Task<List<ApiOfferData>> GetOffersAsync(DbInquireData dbInquireData, CancellationToken ct)
     {
-        File.WriteAllText("dupa1", "Dupa1");
-        
         var postedInquireId = await loanBankClient.PostInquireAsync(dbInquireData, authClient, ct);
-        File.WriteAllText("inquireId", postedInquireId);
         if (postedInquireId is null)
         {
             return new();

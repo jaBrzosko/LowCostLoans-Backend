@@ -4,12 +4,12 @@ namespace Services.Services.Apis.LoanBankApis.Clients;
 
 public class GovernmentDocument
 {
-    //[JsonPropertyName("typeId")]
+    [JsonPropertyName("typeId")]
     public int? TypeId { get; set; }
-    //[JsonPropertyName("name")]
+    [JsonPropertyName("name")]
     public string? Name { get; set; }
-    //[JsonPropertyName("description")]
+    [JsonPropertyName("description")]
     public string? Description { get; set; }
-    //[JsonPropertyName("number")]
+    [JsonPropertyName("number")]
     public string? Number { get; set; }
 }
