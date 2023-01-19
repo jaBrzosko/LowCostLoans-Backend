@@ -6,6 +6,8 @@ using Services.ValidationExtensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Services.Configurations;
+using Services.Services.Apis.LoanBankApis;
+using Services.Services.Apis.LoanBankApis.Clients;
 using Services.Services.Apis.OurApis;
 using Services.Services.Apis.OurApis.Clients;
 using Services.Services.Auth0;
@@ -24,15 +26,21 @@ public class Program
 
         builder.Services.AddSingleton(new OurApiConfiguration(builder.Configuration["OurApiUrlPrefix"], builder.Configuration["OurApiApiKey"]));
         builder.Services.AddSingleton(new Auth0Configuration(builder.Configuration["Auth0ApiUrl"]));
+        builder.Services.AddSingleton(new LoanBankConfiguration(builder.Configuration["LoanBankUrlPrefix"], 
+            builder.Configuration["LoanBankAuthUrlPrefix"], builder.Configuration["LoanBankApiKeyName"], 
+            builder.Configuration["LoanBankApiKeySecret"]));
 
         builder.Services.AddHttpClient<Auth0Client>().ConfigureHttpClient(Auth0Client.Configure);
         builder.Services.AddHttpClient<OurApiClient>().ConfigureHttpClient(OurApiClient.Configure);
+        builder.Services.AddHttpClient<LoanBankClient>().ConfigureHttpClient(LoanBankClient.Configure);
+        builder.Services.AddHttpClient<LoanBankAuthClient>().ConfigureHttpClient(LoanBankAuthClient.Configure);
         
         builder.Services.AddScoped<InquiresRepository>();
         builder.Services.AddScoped<OffersRepository>();
         builder.Services.AddScoped<UsersRepository>();
         
         builder.Services.AddScoped<OurApiOffersGetter>();
+        builder.Services.AddScoped<LoanBankOffersGetter>();
         
         builder.Services.AddFastEndpoints();
         builder.Services.AddSwaggerDoc();

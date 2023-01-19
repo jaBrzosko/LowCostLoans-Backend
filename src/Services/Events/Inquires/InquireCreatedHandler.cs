@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Services.Data;
 using Services.Data.Repositories;
 using Services.Services.Apis;
+using Services.Services.Apis.LoanBankApis;
+using Services.Services.Apis.LoanBankApis.Clients;
 using Services.Services.Apis.OurApis;
 
 namespace Services.Events.Inquires;
@@ -59,6 +61,7 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
         apiOffersGetters = new()
         {
             scope.ServiceProvider.GetService<OurApiOffersGetter>()!,
+            scope.ServiceProvider.GetService<LoanBankOffersGetter>()!
         };
     }
 
