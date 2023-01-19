@@ -9,6 +9,7 @@ using Services.Configurations;
 using Services.Services.Apis.OurApis;
 using Services.Services.Apis.OurApis.Clients;
 using Services.Services.Auth0;
+using Services.Services.Mail;
 
 namespace Api;
 
@@ -17,23 +18,33 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        
+
         builder.Services.AddDbContext<CoreDbContext>(
             opts => opts.UseNpgsql(builder.Configuration["DatabaseConnectionString"])
         );
 
         builder.Services.AddSingleton(new OurApiConfiguration(builder.Configuration["OurApiUrlPrefix"], builder.Configuration["OurApiApiKey"]));
         builder.Services.AddSingleton(new Auth0Configuration(builder.Configuration["Auth0ApiUrl"]));
+        builder.Services.AddSingleton(new MailConfiguration(
+          builder.Configuration["MailHost"],
+          builder.Configuration["MailPort"],
+          builder.Configuration["MailUseSsl"],
+          builder.Configuration["MailUser"],
+          builder.Configuration["MailPassword"],
+          builder.Configuration["MailSender"],
+          builder.Configuration["MailSenderMail"]
+        ));
 
         builder.Services.AddHttpClient<Auth0Client>().ConfigureHttpClient(Auth0Client.Configure);
         builder.Services.AddHttpClient<OurApiClient>().ConfigureHttpClient(OurApiClient.Configure);
-        
+        builder.Services.AddScoped<MailClient>();
+
         builder.Services.AddScoped<InquiresRepository>();
         builder.Services.AddScoped<OffersRepository>();
         builder.Services.AddScoped<UsersRepository>();
-        
+
         builder.Services.AddScoped<OurApiOffersGetter>();
-        
+
         builder.Services.AddFastEndpoints();
         builder.Services.AddSwaggerDoc();
         // CORS
@@ -82,11 +93,11 @@ public class Program
         });
         app.UseOpenApi();
         app.UseSwaggerUi3(s => s.ConfigureDefaults());
-        
+
         using (var scope = app.Services.CreateScope())
         {
             var services = scope.ServiceProvider;
-        
+
             var context = services.GetRequiredService<CoreDbContext>();
             if (context.Database.GetPendingMigrations().Any())
             {
