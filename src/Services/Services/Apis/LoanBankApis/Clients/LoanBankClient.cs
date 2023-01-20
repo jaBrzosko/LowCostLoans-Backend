@@ -53,8 +53,8 @@ public class LoanBankClient
     {
         var postInquire = new InquireRequest
         {
-            Value = inquireData.MoneyInSmallestUnit,
-            NumberOfInstallments = inquireData.NumberOfInstallments / 100,
+            Value = inquireData.MoneyInSmallestUnit / 100,
+            NumberOfInstallments = inquireData.NumberOfInstallments,
             PersonalData = new PersonalData
             {
                 FirstName = inquireData.DbPersonalData.FirstName,
