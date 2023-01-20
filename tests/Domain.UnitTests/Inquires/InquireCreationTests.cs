@@ -16,14 +16,14 @@ public class InquireCreationTests
     [Fact]
     public void Create_from_PersonalData()
     {
-        var personalData = new PersonalData("first name", "last name", "pesel", GovernmentIdType.Pesel, JobType.SomeJobType);
+        var personalData = new PersonalData("first name", "last name", "pesel", "email", GovernmentIdType.Pesel, JobType.SomeJobType);
         TestCreation(null, personalData, 11231, 123312);
     }
 
     [Fact]
     public void UserId_and_Personal_data_are_not_null()
     {
-        var personalData = new PersonalData("first name", "last name", "pesel", GovernmentIdType.Pesel, JobType.SomeJobType);
+        var personalData = new PersonalData("first name", "last name", "pesel", "email", GovernmentIdType.Pesel, JobType.SomeJobType);
         TestThrowingArgumentException(Guid.NewGuid().ToString(), personalData, 11231, 123312);
     }
     

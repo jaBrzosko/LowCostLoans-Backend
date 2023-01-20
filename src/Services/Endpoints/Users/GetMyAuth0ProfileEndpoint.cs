@@ -1,6 +1,6 @@
 using Contracts.Users;
 using FastEndpoints;
-using Services.Data.Auth0;
+using Services.Services.Auth0;
 
 namespace Services.Endpoints.Users;
 

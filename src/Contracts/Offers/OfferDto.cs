@@ -7,5 +7,6 @@ public class OfferDto
     public int InterestRateInPromiles { get; set; }
     public int MoneyInSmallestUnit { get; set; }
     public int NumberOfInstallments { get; set; }
+    public OfferSourceBankDto SourceBank { get; set; }
     public DateTime CreationTime { get; set; }
 }
