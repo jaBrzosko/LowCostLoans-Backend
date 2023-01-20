@@ -64,6 +64,8 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
             }
         }
 
+        await SendEmailsAsync(inquire, createdOffers, usersRepository, mailClient, ct);
+
         await dbContext.SaveChangesAsync(ct);
     }
 
