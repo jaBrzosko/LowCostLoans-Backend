@@ -59,7 +59,7 @@ public class OurApiClient
             },
         };
         var content = JsonContent.Create(postInquire);
-        var response = await client.PostAsync("api/inquiries/createAnonymousInquire", content, ct);
+        var response = await client.PostAsync("inquiries/createAnonymousInquire", content, ct);
         var inquire = await response.Content.ReadFromJsonAsync<InquireResponse>(cancellationToken: ct);
         return inquire!.Id;
     }
