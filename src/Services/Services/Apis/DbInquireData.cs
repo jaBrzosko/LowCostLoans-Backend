@@ -9,7 +9,7 @@ public class DbInquireData
     public DateTime CreationTime { get; set; }
 }
 
-public record DbPersonalData(string FirstName, string LastName, string GovernmentId, DbGovernmentIdType GovernmentIdType, DbJobType JobType);
+public record DbPersonalData(string FirstName, string LastName, string GovernmentId, string Email, DbGovernmentIdType GovernmentIdType, DbJobType JobType);
 
 public enum DbGovernmentIdType
 {

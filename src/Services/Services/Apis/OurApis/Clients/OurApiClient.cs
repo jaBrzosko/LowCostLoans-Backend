@@ -1,9 +1,16 @@
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using Contracts.Offers;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Services.Configurations;
 
 namespace Services.Services.Apis.OurApis.Clients;
 
 public class OurApiClient
 {
+    private const string ApiKeyHeaderName = "ApiKey";
+
     private readonly HttpClient client;
 
     public OurApiClient(HttpClient client)
@@ -11,12 +18,14 @@ public class OurApiClient
         this.client = client;
     }
 
-    public static void Configure(HttpClient client)
+    public static void Configure(IServiceProvider serviceProvider, HttpClient client)
     {
-        client.BaseAddress = new Uri("http://api:80"); // TODO: load it from configuration
+        var configuration = serviceProvider.GetService<OurApiConfiguration>()!;
+        client.BaseAddress = new Uri(configuration.UrlPrefix);
+        client.DefaultRequestHeaders.Add(ApiKeyHeaderName, configuration.ApiKey);
     }
 
-    public async Task<List<ApiOfferData>> GetOffersAsync(Guid inquireId, CancellationToken ct)
+    public virtual async Task<List<ApiOfferData>> GetOffersAsync(Guid inquireId, CancellationToken ct)
     {
         var response = await client.GetAsync($"offers/getOffersByInquireId?Id={inquireId}", ct);
         var offerList = await response.Content.ReadFromJsonAsync<OfferList>(cancellationToken: ct);
@@ -27,13 +36,14 @@ public class OurApiClient
                 InterestRateInPromiles = o.InterestRate,
                 MoneyInSmallestUnit = offerList.MoneyInSmallestUnit,
                 NumberOfInstallments = offerList.NumberOfInstallments,
+                BankId = o.Id.ToString()
             })
             .ToList()
             ??
             new();
     }
 
-    public async Task<Guid?> PostInquireAsync(DbInquireData inquireData, CancellationToken ct)
+    public virtual async Task<Guid?> PostInquireAsync(DbInquireData inquireData, CancellationToken ct)
     {
         var postInquire = new InquireRequest
         {
@@ -49,8 +59,40 @@ public class OurApiClient
             },
         };
         var content = JsonContent.Create(postInquire);
-        var response = await client.PostAsync("inquiries/createInquireAsAnonymous", content, ct);
+        var response = await client.PostAsync("inquiries/createAnonymousInquire", content, ct);
         var inquire = await response.Content.ReadFromJsonAsync<InquireResponse>(cancellationToken: ct);
         return inquire!.Id;
+    }
+
+    public virtual async Task<Uri> GetOfferContract(CancellationToken ct)
+    {
+        var response = await client.GetAsync("offers/getOfferContract", ct);
+        var contract = await response.Content.ReadFromJsonAsync<Contract>(cancellationToken: ct);
+        return contract!.ContractUrl;
+    }
+
+    public virtual async Task PostAcceptOffer(string offerId, IFormFile file, CancellationToken ct)
+    {
+        var content = new MultipartFormDataContent();
+
+        var offerIdContent = new StringContent(offerId);
+        content.Add(offerIdContent, "OfferId");
+
+        var contractContent = new StreamContent(file.OpenReadStream());
+        contractContent.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data")
+        {
+            Name = "Contract",
+            FileName = file.FileName
+        };
+        content.Add(contractContent);
+
+        await client.PostAsync("offers/accept", content, ct);
+    }
+
+    public virtual async Task<OfferStatusTypeDto> GetOfferStatus(string offerId, CancellationToken ct)
+    {
+        var response = await client.GetAsync($"offers/getOfferStatus?Id={offerId}", ct);
+        var status = await response.Content.ReadFromJsonAsync<OfferStatusOurBank>(cancellationToken: ct);
+        return status!.Status;
     }
 }

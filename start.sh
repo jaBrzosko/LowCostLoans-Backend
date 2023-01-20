@@ -9,5 +9,5 @@ fi
 cd Backend
 
 # Run docker compose for this backend
-docker-compose -f src/docker-compose.yaml up -d --build
+docker-compose -f docker-compose.yaml up -d --build
 
