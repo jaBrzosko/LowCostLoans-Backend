@@ -35,6 +35,7 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
         var inquire = await inquiriesRepository.FindAndEnsureExistence(eventModel.InquireId, ct);
         var createdOffers = new List<Guid>();
 
+        bool anyChanges = false;
         try
         {
             foreach (var offersGetter in apiOffersGetters)
@@ -47,6 +48,7 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
                     
                     createdOffers.Add(offer.Id);
                 }
+                anyChanges = true;
             }
 
             inquire.UpdateStatus(InquireStatus.OffersGenerated);
@@ -54,10 +56,12 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
         }
         catch (Exception exception)
         {
-            inquire.UpdateStatus(InquireStatus.OffersGenerationFailed);
-            inquiriesRepository.Update(inquire);
-            File.WriteAllText("dupa2", exception.ToString());
-
+            if (!anyChanges)
+            {
+             
+                inquire.UpdateStatus(InquireStatus.OffersGenerationFailed);
+                inquiriesRepository.Update(inquire);   
+            }
         }
 
         await dbContext.SaveChangesAsync(ct);
