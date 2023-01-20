@@ -57,7 +57,7 @@ public class GetOfferByUserEndpoint : Endpoint<GetOfferByUser, PaginationResultD
                 NumberOfInstallments = o.NumberOfInstallments,
                 InterestRateInPromiles = o.InterestRateInPromiles,
                 CreationTime = o.CreationTime,
-                SourceBank = OfferSourceBankDto.OurBank
+                SourceBank = (OfferSourceBankDto)o.SourceBank
             })
             .ToListAsync(ct);
         var count = await query

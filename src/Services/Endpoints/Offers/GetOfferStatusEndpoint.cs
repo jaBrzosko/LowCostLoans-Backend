@@ -5,6 +5,7 @@ using Contracts.Offers;
 using Domain.Offers;
 using Microsoft.EntityFrameworkCore;
 using Services.Data.Repositories;
+using Services.Services.Apis.LoanBankApis.Clients;
 using Services.Services.Apis.OurApis.Clients;
 
 namespace Services.Endpoints.Offers;
@@ -16,11 +17,12 @@ public class GetOfferStatusEndpoint : Endpoint<GetOfferStatus, OfferStatusDto?>
 {
     private readonly OffersRepository offersRepository;
     private readonly OurApiClient ourApiClient;
-
-    public GetOfferStatusEndpoint(OffersRepository offersRepository, OurApiClient ourApiClient)
+    private readonly LoanBankClient loanBankClient;
+    public GetOfferStatusEndpoint(OffersRepository offersRepository, OurApiClient ourApiClient, LoanBankClient loanBankClient)
     {
         this.offersRepository = offersRepository;
         this.ourApiClient = ourApiClient;
+        this.loanBankClient = loanBankClient;
     }
 
     public override async Task HandleAsync(GetOfferStatus req, CancellationToken ct)
@@ -43,6 +45,16 @@ public class GetOfferStatusEndpoint : Endpoint<GetOfferStatus, OfferStatusDto?>
                         };
                         break;
                     }
+                case (OfferSourceBank.LoanBank):
+                {
+                    var response = await loanBankClient.GetOfferStatus(offer.BankId, ct);
+                    retOffer = new OfferStatusDto
+                    {
+                        Id = req.Id,
+                        Status = response
+                    };
+                    break;
+                }
             }
 
             await SendAsync(retOffer, cancellation: ct);
