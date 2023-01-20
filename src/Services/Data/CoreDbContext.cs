@@ -11,6 +11,7 @@ public class CoreDbContext : DbContext
     public DbSet<User> Users { get; set; }
     public DbSet<Inquire> Inquiries { get; set; }
     public DbSet<Offer> Offers { get; set; }
+    public DbSet<PendingInquire> PendingInquiries { get; set; }
 
     public CoreDbContext(DbContextOptions<CoreDbContext> options) : base(options)
     { }
@@ -20,6 +21,7 @@ public class CoreDbContext : DbContext
         ConfigureUsers(modelBuilder);
         ConfigureInquiries(modelBuilder);
         ConfigureOffers(modelBuilder);
+        ConfigurePendingInquiries(modelBuilder);
     }
 
     private static void ConfigureUsers(ModelBuilder modelBuilder)
@@ -78,6 +80,19 @@ public class CoreDbContext : DbContext
             cfg.Property(e => e.BankId).HasMaxLength(StringLengths.ShortString);
 
             cfg.HasIndex(e => e.InquireId);
+        });
+    }
+    
+    private static void ConfigurePendingInquiries(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<PendingInquire>(cfg =>
+        {
+            cfg.HasKey(e => e.BankInquireId);
+            cfg.Property(e => e.BankInquireId);
+            cfg.Property(e => e.InquireId);
+            cfg.Property(e => e.SourceBank);
+
+            cfg.HasIndex(e => e.BankInquireId);
         });
     }
 }

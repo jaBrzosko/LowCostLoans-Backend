@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Services.Data;
@@ -11,9 +12,10 @@ using Services.Data;
 namespace Services.Migrations
 {
     [DbContext(typeof(CoreDbContext))]
-    partial class CoreDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230119215217_AddPendingInquiries")]
+    partial class AddPendingInquiries
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -124,13 +126,6 @@ namespace Services.Migrations
                             b1.Property<Guid>("InquireId")
                                 .HasColumnType("uuid");
 
-                            b1.Property<string>("Email")
-                                .IsRequired()
-                                .ValueGeneratedOnAdd()
-                                .HasMaxLength(500)
-                                .HasColumnType("character varying(500)")
-                                .HasDefaultValue("zstap.mario.z.rio@aleeas.com");
-
                             b1.Property<string>("FirstName")
                                 .IsRequired()
                                 .HasMaxLength(250)
@@ -169,13 +164,6 @@ namespace Services.Migrations
                         {
                             b1.Property<string>("UserId")
                                 .HasColumnType("character varying(250)");
-
-                            b1.Property<string>("Email")
-                                .IsRequired()
-                                .ValueGeneratedOnAdd()
-                                .HasMaxLength(500)
-                                .HasColumnType("character varying(500)")
-                                .HasDefaultValue("zstap.mario.z.rio@aleeas.com");
 
                             b1.Property<string>("FirstName")
                                 .IsRequired()

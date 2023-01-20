@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Services.Data;
 using Services.Data.Repositories;
 using Services.Services.Apis;
+using Services.Services.Apis.LoanBankApis;
+using Services.Services.Apis.LoanBankApis.Clients;
 using Services.Services.Apis.OurApis;
 using Services.Services.Mail;
 
@@ -33,6 +35,7 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
         var inquire = await inquiriesRepository.FindAndEnsureExistence(eventModel.InquireId, ct);
         var createdOffers = new List<Guid>();
 
+        bool anyChanges = false;
         try
         {
             foreach (var offersGetter in apiOffersGetters)
@@ -45,15 +48,20 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
                     
                     createdOffers.Add(offer.Id);
                 }
+                anyChanges = true;
             }
 
             inquire.UpdateStatus(InquireStatus.OffersGenerated);
             inquiriesRepository.Update(inquire);
         }
-        catch (Exception)
+        catch (Exception exception)
         {
-            inquire.UpdateStatus(InquireStatus.OffersGenerationFailed);
-            inquiriesRepository.Update(inquire);
+            if (!anyChanges)
+            {
+             
+                inquire.UpdateStatus(InquireStatus.OffersGenerationFailed);
+                inquiriesRepository.Update(inquire);   
+            }
         }
 
         await dbContext.SaveChangesAsync(ct);
@@ -77,6 +85,7 @@ public class InquireCreatedHandler : IEventHandler<InquireCreatedEvent>
         apiOffersGetters = new()
         {
             scope.ServiceProvider.GetService<OurApiOffersGetter>()!,
+            scope.ServiceProvider.GetService<LoanBankOffersGetter>()!
         };
     }
 
